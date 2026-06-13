@@ -72,14 +72,35 @@ Route::get('/transactions', function(){
     }
 });
 
-Route::get('/view-transaction/code={code}', function($code){
-    $data = Transaction::where('code', $code)->get()->first();
-    return view('Users.User.ViewTransactions', ['data' => $data]);
+Route::get('/request-document', function(){
+    if (Auth::check()){
+        if (auth()->user()->role == "User"){
+
+            return view('Users.User.RequestDocument');
+        }
+    }else{
+        return redirect('/');
+    }
 });
+
+Route::get('/view-transaction/transaction-code={transactionCode}', function($transactionCode){
+    if (Auth::check()){
+        if (auth()->user()->role == "Admin"){
+            $data = Transaction::where('code', $transactionCode)->get()->first();
+            return view('Users.Admin.ViewTransaction', ['transaction' => $data]);
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
 
 Route::get('/get-master-lists', function(){
     return view('Auth.SearchMasterLists');
 });
+
+
+
 
 //Authentications Controls
 Route::post('/login', [UserController::class, 'login']);
@@ -95,11 +116,14 @@ Route::post('/add-masterlist', [MasterListController::class, 'addMasterLists']);
 Route::post('/edit-masterlist', [MasterListController::class, 'editMasterLists']);
 Route::post('/delete-masterlist', [MasterListController::class, 'deleteMasterLists']);
 
-Route::post('/create-transaction', [TransactionController::class, 'createTransaction']);
 
 Route::post('/upload-image', [ProfilePicController::class, 'uploadImage']);
 
 Route::post('/register', [UserController::class, 'register']);
+
+Route::post('/submit-request', [TransactionController::class, 'addRequest']);
+Route::post('/edit-transaction', [TransactionController::class, 'editTransaction']);
+Route::post('/delete-transaction', [TransactionController::class, 'deleteTransaction']);
 
 //Getter Controls
 Route::get('/get-users/option={option}/filter={filter}', function($option, $filter){
@@ -168,5 +192,22 @@ Route::get('/register/list-code={listCode}', function($listCode){
 
 Route::get('/get-profile-details/user-code={userCode}', function($userCode){
     $data = User::where('userCode', $userCode)->get()->first();
+    return response()->json($data);
+});
+
+Route::get('/get-transactions/user-code={userCode}', function($userCode){
+
+    if (auth()->user()->role == "Admin"){
+        $data = Transaction::with(['user'])->get();
+        return response()->json($data);
+    }else{
+        $data = Transaction::where('userCode', $userCode)->with(['user'])->get();
+        return response()->json($data);
+    }
+
+});
+
+Route::get('/get-transactions/transaction-code={transactionCode}', function($transactionCode){
+    $data = Transaction::where('code', $transactionCode)->with(['user'])->get()->first();
     return response()->json($data);
 });

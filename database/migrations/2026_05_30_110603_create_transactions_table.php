@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('code');
             $table->string('purpose');
             $table->string('validity');
+            $table->string('remarks');
             $table->timestamps();
         });
     }

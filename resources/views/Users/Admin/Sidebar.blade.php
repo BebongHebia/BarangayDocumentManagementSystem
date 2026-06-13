@@ -84,7 +84,15 @@
                     </a>
                 </li>
 
+
                 <li class="nav-item">
+                    <a href="{{ url('/transactions') }}" class="nav-link">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>Transactions</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">s
                     <a href="{{ url('/masterlists') }}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>
@@ -123,12 +131,7 @@
                 </li>
 
 
-                <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link">
-                        <i class="nav-icon far fa-image"></i>
-                        <p>Transactions</p>
-                    </a>
-                </li>
+
 
                 <li class="nav-item">
                     <a href="pages/gallery.html" class="nav-link">

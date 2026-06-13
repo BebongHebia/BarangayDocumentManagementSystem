@@ -14,5 +14,10 @@ class Transaction extends Model
         'code',
         'purpose',
         'validity',
+        'remarks',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class, 'userCode', 'userCode');
+    }
 }

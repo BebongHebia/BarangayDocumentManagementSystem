@@ -7,17 +7,40 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function createTransaction(Request $request){
+    public function addRequest(Request $request){
         Transaction::create([
-            'userCode' => auth()->user()->userCode,
+            'userCode' => $request->userCode,
             'type' => $request->type,
-            'dateCreated' => date('Y-m-d'),
-            'status' => "Pending",
-            'code' => $request->code,
+            'dateCreated' => date("m-d-Y"),
+            'status' => 'Pending',
+            'code' => date("Ymdhis"),
             'purpose' => $request->purpose,
-            'validity' => date('Y-m-d'),
+            'validity' => "N/A",
+            'remarks' => "N/A",
         ]);
 
-        return redirect('/view-transaction/code=' . $request->code);
+        if (auth()->user()->role == "Admin"){
+            return response()->json();
+        }else{
+            return response()->json([
+                'success' => true,
+                'message' => 'Request added successfully',
+                'redirect_url' => url('/transactions')
+            ]);
+        }
+    }
+
+    public function editTransaction(Request $request){
+        $data = Transaction::find($request->transactionId);
+        $data->type = $request->type;
+        $data->purpose = $request->purpose;
+        $data->save();
+        return response()->json();
+    }
+
+    public function deleteTransaction(Request $request){
+        $data = Transaction::find($request->transactionId);
+        $data->delete();
+        return response()->json();
     }
 }

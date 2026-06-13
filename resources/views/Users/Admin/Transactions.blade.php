@@ -1,9 +1,8 @@
-@extends('Users.User.Sidebar')
+@extends('Users.Admin.Sidebar')
 @section('sidebar')
-@include('Components.Transactions.User.ViewTransactionModal')
-@include('Components.Transactions.User.EditTransactionModal')
-@include('Components.Transactions.User.DeleteTransactionModal')
+@include('Components.Transactions.Admin.CreateTransactionModal')
 <input type="hidden" id="mainUserCode" value="{{ auth()->user()->userCode }}">
+
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -29,30 +28,27 @@
                 <div class="col-sm-12">
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h5 class="card-title">My Transactions</h5>
+                            <h5 class="card-title">Lists of Transactions</h5>
                         </div>
                         <div class="card-body">
-
-
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <a href="{{ url('/request-document') }}" type="button" class="btn btn-dark">
-                                        <i class="fas fa-plus"></i> Add new transactions
-                                    </a>
+                                    <button class="btn btn-dark" data-toggle="modal" data-target="#CreateTransactionModal">
+                                        <i class="fas fa-plus"></i> Create Transactions
+                                    </button>
                                 </div>
                             </div>
 
-                            <div class="row mt-3">
+                            <div class="row mt-2">
                                 <div class="col-sm-12">
-                                    @include('Components.Transactions.User.TransactionTable')
+                                    @include("Components.Transactions.Admin.TransactionTable")
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
             </div>
+
 
 
         </div>
@@ -61,5 +57,5 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-<script src="{{ asset('assets/Javascripts/Transactions/User/transactions.js') }}"></script>
+<script src="{{ asset('assets/Javascripts/Transactions/Admin/transactions.js') }}"></script>
 @endsection
