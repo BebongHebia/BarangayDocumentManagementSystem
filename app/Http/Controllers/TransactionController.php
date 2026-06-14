@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SmsQue;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -17,6 +19,7 @@ class TransactionController extends Controller
             'purpose' => $request->purpose,
             'validity' => "N/A",
             'remarks' => "N/A",
+            'dateSched' => "N/A",
         ]);
 
         if (auth()->user()->role == "Admin"){
@@ -43,4 +46,36 @@ class TransactionController extends Controller
         $data->delete();
         return response()->json();
     }
+
+    public function processRequest(Request $request){
+        $data = Transaction::find($request->transactionId);
+        $data->remarks = $request->remarks;
+        $data->status = "Processing";
+        $data->save();
+
+        $users = User::where("userCode", $request->userCode)->get()->first();
+
+        SmsQue::create([
+            "userCode" => $users->userCode,
+            "name" => $users->completeName,
+            "phone" => $users->phone,
+            "transactionCode" => $data->code,
+            "docType" => $data->type,
+            "smsStatus" => "Pending",
+            "code" => date("Ymdhis"),
+            "actType" => "Processing",
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Request added successfully',
+            'redirect_url' => url('/transactions')
+        ]);
+
+
+    }
+
+
+
+
 }

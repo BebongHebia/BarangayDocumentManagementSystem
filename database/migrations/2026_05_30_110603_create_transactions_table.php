@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('purpose');
             $table->string('validity');
             $table->string('remarks');
+            $table->string('dateSched');
             $table->timestamps();
         });
     }

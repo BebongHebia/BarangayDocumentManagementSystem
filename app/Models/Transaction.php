@@ -15,6 +15,7 @@ class Transaction extends Model
         'purpose',
         'validity',
         'remarks',
+        'dateSched',
     ];
 
     public function user(){

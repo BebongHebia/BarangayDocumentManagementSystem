@@ -86,7 +86,7 @@ Route::get('/request-document', function(){
 Route::get('/view-transaction/transaction-code={transactionCode}', function($transactionCode){
     if (Auth::check()){
         if (auth()->user()->role == "Admin"){
-            $data = Transaction::where('code', $transactionCode)->get()->first();
+            $data = Transaction::where('code', $transactionCode)->with(['user'])->get()->first();
             return view('Users.Admin.ViewTransaction', ['transaction' => $data]);
         }
     }else{
@@ -124,6 +124,7 @@ Route::post('/register', [UserController::class, 'register']);
 Route::post('/submit-request', [TransactionController::class, 'addRequest']);
 Route::post('/edit-transaction', [TransactionController::class, 'editTransaction']);
 Route::post('/delete-transaction', [TransactionController::class, 'deleteTransaction']);
+Route::post('/process-request', [TransactionController::class, 'processRequest']);
 
 //Getter Controls
 Route::get('/get-users/option={option}/filter={filter}', function($option, $filter){
