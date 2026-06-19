@@ -108,7 +108,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/tables/data.html" class="nav-link">
+                            <a href="{{ url('/resident-accounts') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Resident Account</p>
                             </a>
@@ -117,7 +117,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link">
+                    <a href="{{ url('/staff-officials') }}" class="nav-link">
                         <i class="nav-icon far fa-image"></i>
                         <p>Staffs & Official</p>
                     </a>

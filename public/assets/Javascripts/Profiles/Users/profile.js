@@ -257,3 +257,109 @@ $(document).ready(function () {
         },
     );
 });
+
+function addProfilePicWithProgress(event) {
+    event.preventDefault();
+
+    var formData = new FormData($("#addProfilePicForm")[0]);
+    var fileInput = $("input[name='image']")[0];
+
+    if (!fileInput.files[0]) {
+        Swal.fire({
+            title: "Error",
+            text: "Please select an image file to upload",
+            icon: "error",
+        });
+        return false;
+    }
+
+    Swal.fire({
+        title: "Confirm Upload",
+        text: "Are you sure you want to upload this profile picture?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, upload it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Uploading...",
+                text: "Please wait",
+                allowOutsideClick: false,
+                didOpen: function () {
+                    Swal.showLoading();
+                },
+            });
+
+            $.ajax({
+                url: baseUrl + "/upload-image",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content",
+                    ),
+                },
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener(
+                        "progress",
+                        function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete =
+                                    (evt.loaded / evt.total) * 100;
+                                console.log(
+                                    "Upload progress: " + percentComplete + "%",
+                                );
+                            }
+                        },
+                        false,
+                    );
+                    return xhr;
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $("#UploadImageModal").modal("hide");
+                        $("#addProfilePicForm")[0].reset();
+
+                        if (response.path) {
+                            var imageUrl =
+                                response.path + "?t=" + new Date().getTime();
+
+                            // Update the profile image
+                            $(".profile-image").attr("src", imageUrl);
+
+                            // Also update any other profile images if needed
+                            $("#profileIcon").attr("src", imageUrl);
+                        }
+
+                        // Force refresh profile details
+                        if (typeof loadProfileDetails === "function") {
+                            loadProfileDetails();
+                        }
+
+                        Swal.fire({
+                            title: "Success!",
+                            text: response.message,
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                    } else {
+                        Swal.fire("Error", response.message, "error");
+                    }
+                },
+                error: function (xhr) {
+                    var message = "Upload failed";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        message = xhr.responseJSON.message;
+                    }
+                    Swal.fire("Error", message, "error");
+                },
+            });
+        }
+    });
+}

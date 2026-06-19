@@ -1,6 +1,8 @@
 @extends('Users.Admin.Sidebar')
 @section('sidebar')
 <input type="hidden" id="transactionCode" value="{{ $transaction->code }}">
+@include('Components.Transactions.Admin.SetApproveModal')
+@include('Components.Transactions.Admin.SetRejectModal')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -37,24 +39,24 @@
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <label>Complete Name</label>
-                                                <input type="text" name="completeName" id="completeName" class="form-control">
+                                                <input type="text" name="completeName" id="completeName" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4">
                                                 <label>Birthdate</label>
-                                                <input type="date" name="bday" id="bday" class="form-control">
+                                                <input type="date" name="bday" id="bday" class="form-control" readonly>
                                             </div>
                                             <div class="col-sm-4">
                                                 <label>Sex</label>
-                                                <select class="form-select select2" name="sex" id="sex" style="width:100%">
+                                                <select class="form-select select2" name="sex" id="sex" style="width:100%" disabled>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-4">
                                                 <label>Civil Status</label>
-                                                <select class="form-select select2" name="civilStatus" id="civilStatus" style="width:100%">
+                                                <select class="form-select select2" name="civilStatus" id="civilStatus" style="width:100%" disabled>
                                                     <option value="Single">Single</option>
                                                     <option value="Married">Married</option>
                                                     <option value="Widowed">Widowed</option>
@@ -65,29 +67,29 @@
                                         <div class="row">
                                             <div class="col-sm-3">
                                                 <label>Place of birth</label>
-                                                <input type="text" name="placeOfBirth" id="placeOfBirth" class="form-control">
+                                                <input type="text" name="placeOfBirth" id="placeOfBirth" class="form-control" readonly>
                                             </div>
                                             <div class="col-sm-3">
                                                 <label>Citizenship</label>
-                                                <input type="text" name="citizenship" id="citizenship" class="form-control">
+                                                <input type="text" name="citizenship" id="citizenship" class="form-control" readonly>
                                             </div>
                                             <div class="col-sm-3">
                                                 <label>Profession</label>
-                                                <input type="text" name="profession" id="profession" class="form-control">
+                                                <input type="text" name="profession" id="profession" class="form-control" readonly>
                                             </div>
                                             <div class="col-sm-3">
                                                 <label>Phone</label>
-                                                <input type="text" name="phone" id="phone" class="form-control">
+                                                <input type="text" name="phone" id="phone" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-2">
                                                 <label>Purok</label>
-                                                <input type="text" name="purok" id="purok" class="form-control">
+                                                <input type="text" name="purok" id="purok" class="form-control" readonly>
                                             </div>
                                             <div class="col-sm-10">
                                                 <label>Current Address</label>
-                                                <input type="text" name="currentAddress" id="currentAddress" class="form-control">
+                                                <input type="text" name="currentAddress" id="currentAddress" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -106,13 +108,13 @@
                                         </div>
 
                                         <div class="col-sm-4">
-                                            <button class="btn btn-primary btn-block">
+                                            <button class="btn btn-primary btn-block" onclick="openApproveTransactionModal({{ $transaction->code }})">
                                                 <i class="fas fa-gavel"></i> Set Approved
                                             </button>
                                         </div>
 
                                         <div class="col-sm-4">
-                                            <button class="btn btn-danger btn-block">
+                                            <button class="btn btn-danger btn-block" onclick="openRejectTransactionModal({{ $transaction->code }})">
                                                 <i class="fas fa-gavel"></i> Set Rejected
                                             </button>
                                         </div>

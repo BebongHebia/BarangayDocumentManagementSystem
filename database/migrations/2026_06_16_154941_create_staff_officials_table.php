@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sms_ques', function (Blueprint $table) {
+        Schema::create('staff_officials', function (Blueprint $table) {
             $table->id();
-            $table->string("userCode");
-            $table->string("name");
-            $table->string("phone");
-            $table->string("transactionCode");
-            $table->string("docType");
-            $table->string("smsStatus");
+            $table->string("completeName");
+            $table->string("sex");
+            $table->string("bday");
+            $table->string("birthPlace");
+            $table->string("civilStatus");
+            $table->string("position");
+            $table->string("status");
             $table->string("code");
-            $table->string("actType");
-            $table->string("remarks");
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sms_ques');
+        Schema::dropIfExists('staff_officials');
     }
 };

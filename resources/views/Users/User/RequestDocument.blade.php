@@ -101,7 +101,7 @@
                                         <div class="row mt-2">
                                             <div class="col-sm-4">
                                                 <label>Complete Name</label>
-                                                <input type="text" name="completeName" id="completeName" class="form-control">
+                                                <input type="text" name="completeName" id="completeName" class="form-control" readonly>
                                             </div>
                                             <div class="col-sm-2">
                                                 <label>Birthdate</label>
@@ -132,7 +132,7 @@
                                         <div class="row mt-2">
                                             <div class="col-sm-12">
                                                 <label>Address</label>
-                                                <input type="text" name="address" id="address" class="form-control">
+                                                <input type="text" name="address" id="address" class="form-control" readonly>
                                             </div>
                                         </div>
                                     </form>

@@ -50,3 +50,117 @@ function setProcessing(event) {
         },
     });
 }
+
+function openApproveTransactionModal(transactionCode) {
+    console.log(transactionCode);
+
+    $.ajax({
+        type: "get",
+        url: baseUrl + "/get-transactions/transaction-code=" + transactionCode,
+        success: function (data) {
+            $("#aprTransactionCode").val(data.code);
+            $("#aprUserCode").val(data.user.userCode);
+        },
+    });
+    $("#SetApproveModal").modal("show");
+}
+
+function openRejectTransactionModal(transactionCode) {
+    console.log(transactionCode);
+
+    $.ajax({
+        type: "get",
+        url: baseUrl + "/get-transactions/transaction-code=" + transactionCode,
+        success: function (data) {
+            $("#rejTransactionCode").val(data.code);
+            $("#rejUserCode").val(data.user.userCode);
+        },
+    });
+    $("#SetRejectModal").modal("show");
+}
+getLatestCedulaNo();
+getLatestORNo();
+
+function getLatestCedulaNo() {
+    $.ajax({
+        type: "get",
+        url: "/get-latest-ced-or-no",
+        success: function (data) {
+            if (data == null) {
+                $("#cedulaNo").val(0);
+            } else {
+                if (data.cedulaNo == "" || data.cedulaNo == null) {
+                    $("#cedulaNo").val(1);
+                } else {
+                    $("#cedulaNo").val(data.cedulaNo + 1);
+                }
+            }
+        },
+    });
+}
+
+function getLatestORNo() {
+    $.ajax({
+        type: "get",
+        url: "/get-latest-ced-or-no",
+        success: function (data) {
+            if (data == null) {
+                $("#orNo").val(0);
+            } else {
+                if (data.orNo == "" || data.orNo == null) {
+                    $("#orNo").val(1);
+                } else {
+                    $("#orNo").val(data.orNo + 1);
+                }
+            }
+        },
+    });
+}
+
+function approveRequest(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "POST",
+        url: baseUrl + "/approve-request",
+        data: $("#approveTransactionForm").serialize(),
+        success: function (data) {
+            $("#approveTransactionForm")[0].reset();
+            $("#SetApproveModal").modal("hide");
+            swal.fire({
+                title: "Success",
+                text: "Request Approved",
+                icon: "success",
+            }).then((result) => {
+                // Redirect after SweetAlert closes
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            });
+        },
+    });
+}
+
+function rejectRequest(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "POST",
+        url: baseUrl + "/reject-request",
+        data: $("#rejectTransactionForm").serialize(),
+        success: function (data) {
+            $("#rejectTransactionForm")[0].reset();
+            $("#SetRejectModal").modal("hide");
+            swal.fire({
+                title: "Success",
+                text: "Request Rejected successfully",
+                icon: "success",
+            }).then((result) => {
+                // Redirect after SweetAlert closes
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            });
+        },
+    });
+}

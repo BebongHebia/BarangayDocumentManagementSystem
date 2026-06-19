@@ -19,4 +19,11 @@ class Payment extends Model
         'orAmount',
         'docAmount',
     ];
+
+    public function transaction(){
+        return $this->belongsTo(Transaction::class, 'code', 'tranCode');
+    }
+
+
+
 }

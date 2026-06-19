@@ -15,5 +15,6 @@ class SmsQue extends Model
         'smsStatus',
         'code',
         'actType',
+        'remarks',
     ];
 }

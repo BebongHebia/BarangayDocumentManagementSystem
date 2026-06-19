@@ -1,6 +1,99 @@
 @extends('Users.User.Sidebar')
 @section('sidebar')
 @include('Components.Profiles.User.UploadImageModal')
+<style>
+    .profile-image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .profile-image-wrapper {
+        width: 200px;
+        height: 200px;
+        border-radius: 12px;
+        padding: 5px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+        display: inline-block;
+    }
+
+    .profile-image-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 10px;
+        padding: 2px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    /* For circle shape - use this if you want circle instead of square */
+    .profile-image-wrapper.circle {
+        border-radius: 50%;
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 8px;
+    }
+
+    /* For rounded square (default) */
+    .profile-image-wrapper {
+        border-radius: 12px;
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* This ensures the image covers the square area without distortion */
+        object-position: center;
+        transition: transform 0.3s ease;
+    }
+
+    .profile-image:hover {
+        transform: scale(1.05);
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        .profile-image-wrapper {
+            width: 150px;
+            height: 150px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-image-wrapper {
+            width: 120px;
+            height: 120px;
+        }
+    }
+
+    /* Optional: Add a frame effect */
+    .profile-image-wrapper.frame-effect {
+        border: 3px solid #4a5568;
+        box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #4a5568;
+    }
+
+    /* Optional: Add a shadow on hover */
+    .profile-image-wrapper:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+</style>
 <!-- Content Wrapper. Contains page content -->
 <input type="hidden" name="userCode" id="userCode" value="{{ auth()->user()->userCode }}">
 <div class="content-wrapper">
@@ -33,18 +126,21 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <center>
-                                        @php
-                                        $profilePic = App\Models\ProfilePic::where('userCode', auth()->user()->userCode)->first();
-                                        @endphp
+                                        <div class="profile-image-container">
+                                            @php
+                                            $profilePic = App\Models\ProfilePic::where('userCode', auth()->user()->userCode)->first();
+                                            @endphp
 
-                                        @if(!$profilePic)
-                                        <img src="{{ asset('assets/images/profile_icon.png') }}" id="profileIcon" class="img-fluid img-circle" style="width:50%; border:1px solid black">
-                                        @else
-                                        <img src="{{ asset('storage/' . $profilePic->path) }}" id="profileIcon" class="img-fluid img-circle" style="width:50%; border:1px solid black">
-                                        @endif
+                                            <div class="profile-image-wrapper">
+                                                @if(!$profilePic)
+                                                <img src="{{ asset('assets/images/profile_icon.png') }}" id="profileIcon" class="profile-image" alt="Profile Picture">
+                                                @else
+                                                <img src="{{ asset('storage/' . $profilePic->path) }}" id="profileIcon" class="profile-image" alt="Profile Picture">
+                                                @endif
+                                            </div>
+                                        </div>
 
-
-                                        <div class="row mt-2">
+                                        <div class="row mt-3">
                                             <div class="col-sm-12">
                                                 <button class="btn btn-success btn-block" data-toggle="modal" data-target="#UploadImageModal">
                                                     <i class="fas fa-upload"></i> Upload Image
@@ -52,9 +148,6 @@
                                             </div>
                                         </div>
                                     </center>
-
-
-
                                 </div>
 
                                 <div class="col-sm-9">

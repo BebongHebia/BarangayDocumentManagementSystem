@@ -2,9 +2,13 @@
 
 use App\Http\Controllers\MasterListController;
 use App\Http\Controllers\ProfilePicController;
+use App\Http\Controllers\StaffOfficialController;
+use App\Http\Controllers\StaffOfficialProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\MasterList;
+use App\Models\Payment;
+use App\Models\StaffOfficial;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -72,11 +76,32 @@ Route::get('/transactions', function(){
     }
 });
 
+Route::get('/resident-accounts', function(){
+    if (Auth::check()){
+        if (auth()->user()->role == "Admin"){
+            return view('Users.Admin.ResidentAccount');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
 Route::get('/request-document', function(){
     if (Auth::check()){
         if (auth()->user()->role == "User"){
 
             return view('Users.User.RequestDocument');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/staff-officials', function(){
+    if (Auth::check()){
+        if (auth()->user()->role == "Admin"){
+
+            return view('Users.Admin.StaffOfficial');
         }
     }else{
         return redirect('/');
@@ -94,10 +119,34 @@ Route::get('/view-transaction/transaction-code={transactionCode}', function($tra
     }
 });
 
+Route::get("/transactions/print-transaction/transaction-code={transactionCode}", function($transactionCode){
+    if (Auth::check()){
+        if (auth()->user()->role == "Admin"){
+            $data = Transaction::where('code', $transactionCode)->with(['user', 'payment'])->get()->first();
+            return view('Users.Admin.PrintDocument', ['transaction' => $data]);
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get("/resident-accounts/view-account/user-code={userCode}", function($userCode){
+    if (Auth::check()){
+        if (auth()->user()->role == "Admin"){
+            $data = User::where("userCode", $userCode)->get()->first();
+            return view('Users.Admin.ViewResidentAccount', ['user' => $data]);
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
 
 Route::get('/get-master-lists', function(){
     return view('Auth.SearchMasterLists');
 });
+
+
 
 
 
@@ -125,7 +174,15 @@ Route::post('/submit-request', [TransactionController::class, 'addRequest']);
 Route::post('/edit-transaction', [TransactionController::class, 'editTransaction']);
 Route::post('/delete-transaction', [TransactionController::class, 'deleteTransaction']);
 Route::post('/process-request', [TransactionController::class, 'processRequest']);
+Route::post('/approve-request', [TransactionController::class, 'approveRequest']);
+Route::post('/reject-request', [TransactionController::class, 'rejectRequest']);
 
+Route::post('/add-staff-official', [StaffOfficialController::class, 'addStaffOfficial']);
+
+Route::post('/edit-staff-official-status', [StaffOfficialController::class, 'editStatus']);
+Route::post('/remove-staff-official', [StaffOfficialController::class, 'deleteStatus']);
+
+Route::post('/upload-staff-image', [StaffOfficialProfileController::class, 'store'])->name('upload.staff.image');
 //Getter Controls
 Route::get('/get-users/option={option}/filter={filter}', function($option, $filter){
     if ($option == "All"){
@@ -210,5 +267,25 @@ Route::get('/get-transactions/user-code={userCode}', function($userCode){
 
 Route::get('/get-transactions/transaction-code={transactionCode}', function($transactionCode){
     $data = Transaction::where('code', $transactionCode)->with(['user'])->get()->first();
+    return response()->json($data);
+});
+
+Route::get('/get-latest-ced-or-no', function(){
+    $data = Payment::latest()->first();
+    return response()->json($data);
+});
+
+Route::get("/get-resident-accounts", function(){
+    $data = User::where("role", "!=", "Admin")->get();
+    return response()->json($data);
+});
+
+Route::get('/get-staff-officials', function(){
+    $data = StaffOfficial::with(['staffImage'])->get();
+    return response()->json($data);
+});
+
+Route::get('/get-staff-official/code={code}', function($code){
+    $data = StaffOfficial::where('code', $code)->with(['staffImage'])->get()->first();
     return response()->json($data);
 });

@@ -1,0 +1,138 @@
+.profile-image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .profile-image-wrapper {
+        width: 200px;
+        height: 200px;
+        border-radius: 12px;
+        padding: 5px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+        display: inline-block;
+    }
+
+    .profile-image-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 10px;
+        padding: 2px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
+
+    /* For circle shape - use this if you want circle instead of square */
+    .profile-image-wrapper.circle {
+        border-radius: 50%;
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 8px;
+    }
+
+    /* For rounded square (default) */
+    .profile-image-wrapper {
+        border-radius: 12px;
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* This ensures the image covers the square area without distortion */
+        object-position: center;
+        transition: transform 0.3s ease;
+    }
+
+    .profile-image:hover {
+        transform: scale(1.05);
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        .profile-image-wrapper {
+            width: 150px;
+            height: 150px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile-image-wrapper {
+            width: 120px;
+            height: 120px;
+        }
+    }
+
+    /* Optional: Add a frame effect */
+    .profile-image-wrapper.frame-effect {
+        border: 3px solid #4a5568;
+        box-shadow: 0 0 0 2px #ffffff, 0 0 0 5px #4a5568;
+    }
+
+    /* Optional: Add a shadow on hover */
+    .profile-image-wrapper:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Validation styles */
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: #28a745;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}
+
+.form-control.is-invalid ~ .invalid-feedback,
+.form-select.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+/* Required field indicator */
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Validation message */
+#validationMessage {
+    display: none;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+#validationMessage.show {
+    display: block;
+}

@@ -132,6 +132,10 @@ class UserController extends Controller
         $data->purok = $request->purok;
         $data->currentAddress = $request->currentAddress;
         $data->save();
-        return response()->json();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Account updated successfully'
+        ]);
     }
 }

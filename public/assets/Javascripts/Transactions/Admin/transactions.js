@@ -28,6 +28,7 @@ function displayTransactions() {
             let counter = 0;
             let statusRow = "";
             $.each(data, function (index, transactions) {
+                var cusRemarks = truncateString(transactions.remarks, 30);
                 if (transactions.status == "Pending") {
                     statusRow = `
                         <span style="color:black; background-color:orange; padding:5px; border-radius: 10px;">
@@ -40,10 +41,16 @@ function displayTransactions() {
                             <b>Processing</b>
                         </span>
                     `;
-                } else {
+                } else if (transactions.status == "Approved") {
                     statusRow = `
                         <span style="color:white; background-color:green; padding:5px; border-radius: 10px;">
                             <b>Approved</b>
+                        </span>
+                    `;
+                } else {
+                    statusRow = `
+                        <span style="color:white; background-color:red; padding:5px; border-radius: 10px;">
+                            <b>Rejected</b>
                         </span>
                     `;
                 }
@@ -57,7 +64,7 @@ function displayTransactions() {
                         <td>${transactions.type}</td>
                         <td>${transactions.purpose}</td>
                         <td>${transactions.dateCreated}</td>
-                        <td>${transactions.remarks}</td>
+                        <td>${cusRemarks}</td>
                         <td>${statusRow}</td>
                         <td>
                             <a href="/view-transaction/transaction-code=${transactions.code}" class="btn btn-info btn-sm">
@@ -72,4 +79,10 @@ function displayTransactions() {
             $("#TransactionTableBody").html(rows);
         },
     });
+}
+
+function truncateString(str, maxLength, suffix = "...") {
+    if (!str) return "";
+    if (str.length <= maxLength) return str;
+    return str.substring(0, maxLength) + suffix;
 }
