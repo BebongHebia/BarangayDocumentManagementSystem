@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\ActImageController;
+use App\Http\Controllers\CalendarActivityController;
 use App\Http\Controllers\MasterListController;
 use App\Http\Controllers\ProfilePicController;
 use App\Http\Controllers\StaffOfficialController;
 use App\Http\Controllers\StaffOfficialProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Models\CalendarActivity;
 use App\Models\MasterList;
 use App\Models\Payment;
 use App\Models\StaffOfficial;
@@ -23,9 +26,11 @@ Route::get('/', function () {
 Route::get('/profile', function(){
     if (Auth::check()){
 
-        if (auth()->user()->role == "Admin"){
+
+
+        if (Auth::user()->role == "Admin"){
             return view('Users.Admin.Dashboard');
-        }elseif (auth()->user()->role == "User"){
+        }elseif (Auth::user()->role == "User"){
             return view('Users.User.Profile');
         }
     }else{
@@ -35,9 +40,9 @@ Route::get('/profile', function(){
 
 Route::get('/dashboard', function(){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
+        if (Auth::user()->role == "Admin"){
             return view('Users.Admin.Dashboard');
-        }elseif (auth()->user()->role == "User"){
+        }elseif (Auth::user()->role == "User"){
             return view('Users.User.Dashboard');
         }
     }else{
@@ -47,7 +52,7 @@ Route::get('/dashboard', function(){
 
 Route::get('/users', function(){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
+        if (Auth::user()->role == "Admin"){
             return view('Users.Admin.Users');
         }
     }else{
@@ -56,7 +61,7 @@ Route::get('/users', function(){
 });
 Route::get('/masterlists', function(){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
+        if (Auth::user()->role== "Admin"){
             return view('Users.Admin.MasterLists');
         }
     }else{
@@ -66,9 +71,9 @@ Route::get('/masterlists', function(){
 
 Route::get('/transactions', function(){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
+        if (Auth::user()->role == "Admin"){
             return view('Users.Admin.Transactions');
-        }elseif (auth()->user()->role == "User"){
+        }elseif (Auth::user()->role == "User"){
             return view('Users.User.Transactions');
         }
     }else{
@@ -78,7 +83,7 @@ Route::get('/transactions', function(){
 
 Route::get('/resident-accounts', function(){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
+        if (Auth::user()->role == "Admin"){
             return view('Users.Admin.ResidentAccount');
         }
     }else{
@@ -88,7 +93,7 @@ Route::get('/resident-accounts', function(){
 
 Route::get('/request-document', function(){
     if (Auth::check()){
-        if (auth()->user()->role == "User"){
+        if (Auth::user()->role == "User"){
 
             return view('Users.User.RequestDocument');
         }
@@ -99,7 +104,7 @@ Route::get('/request-document', function(){
 
 Route::get('/staff-officials', function(){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
+        if (Auth::user()->role == "Admin"){
 
             return view('Users.Admin.StaffOfficial');
         }
@@ -108,10 +113,45 @@ Route::get('/staff-officials', function(){
     }
 });
 
+Route::get('/organization-chart', function(){
+    if (Auth::check()){
+        if (Auth::user()->role == "Admin"){
+
+            return view('Users.Admin.OrganizationChart');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/population', function(){
+    if (Auth::check()){
+        if (Auth::user()->role == "Admin"){
+
+            return view('Users.Admin.Population');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/calendar-of-activities', function(){
+    if (Auth::check()){
+        if (Auth::user()->role == "Admin"){
+
+            return view('Users.Admin.CalendarOfActivities');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+
+
 Route::get('/view-transaction/transaction-code={transactionCode}', function($transactionCode){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
-            $data = Transaction::where('code', $transactionCode)->with(['user'])->get()->first();
+        if (Auth::user()->role == "Admin"){
+            $data = Transaction::where('code', $transactionCode)->with(['user'])->first();
             return view('Users.Admin.ViewTransaction', ['transaction' => $data]);
         }
     }else{
@@ -121,8 +161,8 @@ Route::get('/view-transaction/transaction-code={transactionCode}', function($tra
 
 Route::get("/transactions/print-transaction/transaction-code={transactionCode}", function($transactionCode){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
-            $data = Transaction::where('code', $transactionCode)->with(['user', 'payment'])->get()->first();
+        if (Auth::user()->role == "Admin"){
+            $data = Transaction::where('code', $transactionCode)->with(['user', 'payment'])->first();
             return view('Users.Admin.PrintDocument', ['transaction' => $data]);
         }
     }else{
@@ -132,8 +172,8 @@ Route::get("/transactions/print-transaction/transaction-code={transactionCode}",
 
 Route::get("/resident-accounts/view-account/user-code={userCode}", function($userCode){
     if (Auth::check()){
-        if (auth()->user()->role == "Admin"){
-            $data = User::where("userCode", $userCode)->get()->first();
+        if (Auth::user()->role == "Admin"){
+            $data = User::where('userCode', $userCode)->first();
             return view('Users.Admin.ViewResidentAccount', ['user' => $data]);
         }
     }else{
@@ -145,8 +185,6 @@ Route::get("/resident-accounts/view-account/user-code={userCode}", function($use
 Route::get('/get-master-lists', function(){
     return view('Auth.SearchMasterLists');
 });
-
-
 
 
 
@@ -183,6 +221,15 @@ Route::post('/edit-staff-official-status', [StaffOfficialController::class, 'edi
 Route::post('/remove-staff-official', [StaffOfficialController::class, 'deleteStatus']);
 
 Route::post('/upload-staff-image', [StaffOfficialProfileController::class, 'store'])->name('upload.staff.image');
+
+Route::post('/add-calendar-activity', [CalendarActivityController::class, 'addCalendarActivity']);
+Route::post('/edit-calendar-activity', [CalendarActivityController::class, 'editCalendarActivity']);
+Route::post('/delete-calendar-activity', [CalendarActivityController::class, 'deleteCalendarActivity']);
+
+Route::post('/calendar-image/upload/{activityId}', [ActImageController::class, 'uploadImage'])->name('calendar.image.upload');
+Route::delete('/calendar-image/delete/{activityId}', [ActImageController::class, 'deleteImage'])->name('calendar.image.delete');
+
+
 //Getter Controls
 Route::get('/get-users/option={option}/filter={filter}', function($option, $filter){
     if ($option == "All"){
@@ -255,7 +302,7 @@ Route::get('/get-profile-details/user-code={userCode}', function($userCode){
 
 Route::get('/get-transactions/user-code={userCode}', function($userCode){
 
-    if (auth()->user()->role == "Admin"){
+    if (Auth::user()->role == "Admin"){
         $data = Transaction::with(['user'])->get();
         return response()->json($data);
     }else{
@@ -287,5 +334,36 @@ Route::get('/get-staff-officials', function(){
 
 Route::get('/get-staff-official/code={code}', function($code){
     $data = StaffOfficial::where('code', $code)->with(['staffImage'])->get()->first();
+    return response()->json($data);
+});
+
+Route::get('/get-population/option={option}/filter={filter}', function($option, $filter){
+    if ($option == "All"){
+        $data = User::where('role' , '!=', "Admin")->get();
+        return response()->json($data);
+    }else{
+        if ($option == "Sector"){
+            $data = User::where('purok', $filter)->where('role' , '!=', "Admin")->get();
+            return response()->json($data);
+        }else if ($option == "Sex"){
+            $data = User::where('sex', $filter)->where('role' , '!=', "Admin")->get();
+            return response()->json($data);
+        }else if ($option == "Civil Status"){
+            $data = User::where('civilStatus', $filter)->where('role' , '!=', "Admin")->get();
+            return response()->json($data);
+        }else if ($option == "Status"){
+            $data = User::where('status', $filter)->where('role' , '!=', "Admin")->get();
+            return response()->json($data);
+        }
+    }
+});
+
+Route::get('/get-calendar-activity', function(){
+    $data = CalendarActivity::with(['getCalActImage'])->get();
+    return response()->json($data);
+});
+
+Route::get('/get-calendar-act/act-id={actId}', function($actId){
+    $data = CalendarActivity::with(['getCalActImage'])->find($actId);
     return response()->json($data);
 });

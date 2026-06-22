@@ -124,7 +124,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link">
+                    <a href="{{ url('/organization-chart') }}" class="nav-link">
                         <i class="nav-icon far fa-image"></i>
                         <p>Organizational charts</p>
                     </a>
@@ -134,14 +134,14 @@
 
 
                 <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link">
+                    <a href="{{ url('/population') }}" class="nav-link">
                         <i class="nav-icon far fa-image"></i>
                         <p>Populations</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link">
+                    <a href="{{ url('/calendar-of-activities') }}" class="nav-link">
                         <i class="nav-icon far fa-image"></i>
                         <p>Calendar of Activity</p>
                     </a>

@@ -73,6 +73,8 @@
     <script src="{{ asset('assets/template/adminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <!-- Select2 -->
     <script src="{{ asset('assets/template/adminLTE/plugins/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ url('https://cdn.jsdelivr.net/npm/sweetalert2@11') }}"></script>
