@@ -148,9 +148,16 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="pages/gallery.html" class="nav-link">
+                    <a href="{{ url('/announcement') }}" class="nav-link">
                         <i class="nav-icon far fa-image"></i>
                         <p>Announcements</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/reports') }}" class="nav-link">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>Reports</p>
                     </a>
                 </li>
 

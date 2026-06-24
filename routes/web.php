@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ActImageController;
+use App\Http\Controllers\AnnImageController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CalendarActivityController;
 use App\Http\Controllers\MasterListController;
 use App\Http\Controllers\ProfilePicController;
@@ -8,14 +10,17 @@ use App\Http\Controllers\StaffOfficialController;
 use App\Http\Controllers\StaffOfficialProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Models\Announcement;
 use App\Models\CalendarActivity;
 use App\Models\MasterList;
 use App\Models\Payment;
 use App\Models\StaffOfficial;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 //Routes
@@ -138,8 +143,27 @@ Route::get('/population', function(){
 Route::get('/calendar-of-activities', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
-
             return view('Users.Admin.CalendarOfActivities');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/announcement', function(){
+    if (Auth::check()){
+        if (Auth::user()->role == "Admin"){
+            return view('Users.Admin.Announcement');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/reports', function(){
+    if (Auth::check()){
+        if (Auth::user()->role == "Admin"){
+            return view('Users.Admin.Reports');
         }
     }else{
         return redirect('/');
@@ -229,6 +253,9 @@ Route::post('/delete-calendar-activity', [CalendarActivityController::class, 'de
 Route::post('/calendar-image/upload/{activityId}', [ActImageController::class, 'uploadImage'])->name('calendar.image.upload');
 Route::delete('/calendar-image/delete/{activityId}', [ActImageController::class, 'deleteImage'])->name('calendar.image.delete');
 
+Route::post('/add-announcement', [AnnouncementController::class, 'addAnnouncement']);
+Route::post('/edit-announcement', [AnnouncementController::class, 'editAnnouncement']);
+Route::post('/delete-announcement', [AnnouncementController::class, 'deleteAnnouncement']);
 
 //Getter Controls
 Route::get('/get-users/option={option}/filter={filter}', function($option, $filter){
@@ -366,4 +393,158 @@ Route::get('/get-calendar-activity', function(){
 Route::get('/get-calendar-act/act-id={actId}', function($actId){
     $data = CalendarActivity::with(['getCalActImage'])->find($actId);
     return response()->json($data);
+});
+
+Route::get('/get-announcements', function(){
+    $data = Announcement::with('image')->get();
+    return response()->json($data);
+});
+
+Route::get('/get-announcement/announcement-id={annId}', function($annId){
+    $data = Announcement::find($annId);
+    return response()->json($data);
+});
+
+// Add these routes
+Route::post('/upload-announcement-image', [AnnImageController::class, 'upload'])->name('upload.announcement.image');
+Route::get('/get-announcement-image/{annId}', [AnnImageController::class, 'getImage']);
+
+
+Route::get('/get-transaction-reports', function(Request $request){
+    try {
+        Log::info('Transaction reports endpoint called', ['request' => $request->all()]);
+        
+        $filterType = $request->get('filter_type', 'daily');
+        
+        // Start with base query
+        $query = Transaction::where('status', 'Approved')->with(['user', 'payment']);
+        
+        switch ($filterType) {
+            case 'daily':
+                if ($request->has('date')) {
+                    $dateInput = $request->get('date');
+                    Log::info('Raw date input:', ['date' => $dateInput]);
+                    
+                    try {
+                        // Parse the date from YYYY-MM-DD format
+                        $date = Carbon::parse($dateInput);
+                        
+                        // Create both formats for comparison
+                        $format1 = $date->format('Y-m-d'); // 2026-06-12
+                        $format2 = $date->format('m-d-Y'); // 06-12-2026
+                        $format3 = $date->format('m/d/Y'); // 06/12/2026
+                        
+                        Log::info('Searching for dates:', [
+                            'format1' => $format1,
+                            'format2' => $format2,
+                            'format3' => $format3
+                        ]);
+                        
+                        // Search for any of the formats
+                        $query->where(function($q) use ($format1, $format2, $format3) {
+                            $q->where('dateCreated', $format1)
+                              ->orWhere('dateCreated', $format2)
+                              ->orWhere('dateCreated', $format3);
+                        });
+                        
+                    } catch (\Exception $e) {
+                        Log::error('Date parsing error:', ['error' => $e->getMessage()]);
+                    }
+                }
+                break;
+                
+            case 'weekly':
+                if ($request->has('week')) {
+                    $week = $request->get('week');
+                    $year = substr($week, 0, 4);
+                    $weekNumber = substr($week, 6);
+                    
+                    $startDate = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
+                    $endDate = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek();
+                    
+                    // Check for dates in both formats within the week range
+                    $startFormats = [
+                        $startDate->format('Y-m-d'),
+                        $startDate->format('m-d-Y'),
+                        $startDate->format('m/d/Y')
+                    ];
+                    $endFormats = [
+                        $endDate->format('Y-m-d'),
+                        $endDate->format('m-d-Y'),
+                        $endDate->format('m/d/Y')
+                    ];
+                    
+                    $query->where(function($q) use ($startFormats, $endFormats) {
+                        foreach ($startFormats as $index => $start) {
+                            $end = $endFormats[$index];
+                            // Use string comparison since dates are stored as strings
+                            $q->orWhereBetween('dateCreated', [$start, $end]);
+                        }
+                    });
+                }
+                break;
+                
+            case 'monthly':
+                if ($request->has('month')) {
+                    $month = $request->get('month');
+                    $parsedDate = Carbon::parse($month);
+                    
+                    $monthNum = $parsedDate->format('m');
+                    $year = $parsedDate->format('Y');
+                    
+                    // For MM-DD-YYYY format
+                    $query->where(function($q) use ($monthNum, $year) {
+                        // Check for MM-DD-YYYY format
+                        $q->where('dateCreated', 'like', $monthNum . '-%-' . $year)
+                        // Check for MM/DD/YYYY format
+                        ->orWhere('dateCreated', 'like', $monthNum . '/%/' . $year)
+                        // Check for MM-YYYY format
+                        ->orWhere('dateCreated', 'like', $monthNum . '-' . $year)
+                        // Check for MM/YYYY format
+                        ->orWhere('dateCreated', 'like', $monthNum . '/' . $year)
+                        // Check for YYYY-MM-DD format
+                        ->orWhere('dateCreated', 'like', $year . '-' . $monthNum . '-%');
+                    });
+                    
+                    Log::info('Monthly filter applied', ['month' => $monthNum, 'year' => $year]);
+                }
+                break;
+                
+            case 'yearly':
+                if ($request->has('year')) {
+                    $year = $request->get('year');
+                    
+                    $query->where(function($q) use ($year) {
+                        $q->where('dateCreated', 'like', $year . '%')    // 2026-06-12
+                          ->orWhere('dateCreated', 'like', '%-' . $year)  // 06-12-2026
+                          ->orWhere('dateCreated', 'like', '%/' . $year); // 06/12/2026
+                    });
+                }
+                break;
+        }
+        
+        $data = $query->get();
+        Log::info('Query executed', ['count' => $data->count()]);
+        
+        // If no data found, return all approved transactions for debugging
+        if ($data->isEmpty()) {
+            Log::info('No data found with filter');
+            $allData = Transaction::where('status', 'Approved')
+                                 ->with(['user', 'payment'])
+                                 ->get();
+            Log::info('All approved transactions count:', ['count' => $allData->count()]);
+        }
+        
+        return response()->json($data);
+        
+    } catch (\Exception $e) {
+        Log::error('Error in transaction reports endpoint', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
 });
