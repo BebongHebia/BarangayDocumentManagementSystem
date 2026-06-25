@@ -39,6 +39,7 @@ class UserController extends Controller
 
         if ($request->password === $request->confirm_password){
             User::create([
+                'listCode' => 'N/A',
                 'completeName' => $request->completeName,
                 'purok' => $request->purok,
                 'sex' => $request->sex,

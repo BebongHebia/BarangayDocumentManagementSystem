@@ -49,6 +49,8 @@ Route::get('/dashboard', function(){
             return view('Users.Admin.Dashboard');
         }elseif (Auth::user()->role == "User"){
             return view('Users.User.Dashboard');
+        }elseif (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.Dashboard');
         }
     }else{
         return redirect('/');
@@ -80,6 +82,8 @@ Route::get('/transactions', function(){
             return view('Users.Admin.Transactions');
         }elseif (Auth::user()->role == "User"){
             return view('Users.User.Transactions');
+        }elseif (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.Transactions');
         }
     }else{
         return redirect('/');
