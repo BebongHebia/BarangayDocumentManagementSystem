@@ -51,6 +51,8 @@ Route::get('/dashboard', function(){
             return view('Users.User.Dashboard');
         }elseif (Auth::user()->role == "Punong Barangay"){
             return view('Users.Kapitan.Dashboard');
+        }elseif (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.Dashboard');
         }
     }else{
         return redirect('/');
@@ -70,6 +72,10 @@ Route::get('/masterlists', function(){
     if (Auth::check()){
         if (Auth::user()->role== "Admin"){
             return view('Users.Admin.MasterLists');
+        }else if (Auth::user()->role== "Punong Barangay"){
+            return view('Users.Kapitan.MasterLists');
+        }else if (Auth::user()->role== "Incharge"){
+            return view('Users.Incharge.MasterLists');
         }
     }else{
         return redirect('/');
@@ -84,6 +90,8 @@ Route::get('/transactions', function(){
             return view('Users.User.Transactions');
         }elseif (Auth::user()->role == "Punong Barangay"){
             return view('Users.Kapitan.Transactions');
+        }elseif (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.Transactions');
         }
     }else{
         return redirect('/');
@@ -94,6 +102,10 @@ Route::get('/resident-accounts', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
             return view('Users.Admin.ResidentAccount');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Admin.ResidentAccount');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.ResidentAccount');
         }
     }else{
         return redirect('/');
@@ -114,8 +126,11 @@ Route::get('/request-document', function(){
 Route::get('/staff-officials', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
-
             return view('Users.Admin.StaffOfficial');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.StaffOfficial');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.StaffOfficial');
         }
     }else{
         return redirect('/');
@@ -125,8 +140,13 @@ Route::get('/staff-officials', function(){
 Route::get('/organization-chart', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
-
             return view('Users.Admin.OrganizationChart');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.OrganizationChart');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.OrganizationChart');
+        }else if (Auth::user()->role == "User"){
+            return view('Users.User.OrganizationChart');
         }
     }else{
         return redirect('/');
@@ -136,8 +156,13 @@ Route::get('/organization-chart', function(){
 Route::get('/population', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
-
             return view('Users.Admin.Population');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.Population');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.Population');
+        }else if (Auth::user()->role == "User"){
+            return view('Users.User.Population');
         }
     }else{
         return redirect('/');
@@ -148,6 +173,12 @@ Route::get('/calendar-of-activities', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
             return view('Users.Admin.CalendarOfActivities');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.CalendarOfActivities');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.CalendarOfActivities');
+        }else if (Auth::user()->role == "User"){
+            return view('Users.User.CalendarOfActivities');
         }
     }else{
         return redirect('/');
@@ -158,6 +189,12 @@ Route::get('/announcement', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
             return view('Users.Admin.Announcement');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.Announcement');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.Announcement');
+        }else if (Auth::user()->role == "User"){
+            return view('Users.User.Announcement');
         }
     }else{
         return redirect('/');
@@ -168,6 +205,10 @@ Route::get('/reports', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
             return view('Users.Admin.Reports');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.Reports');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.Reports');
         }
     }else{
         return redirect('/');
@@ -181,6 +222,12 @@ Route::get('/view-transaction/transaction-code={transactionCode}', function($tra
         if (Auth::user()->role == "Admin"){
             $data = Transaction::where('code', $transactionCode)->with(['user'])->first();
             return view('Users.Admin.ViewTransaction', ['transaction' => $data]);
+        }else if (Auth::user()->role == "Punong Barangay"){
+            $data = Transaction::where('code', $transactionCode)->with(['user'])->first();
+            return view('Users.Kapitan.ViewTransaction', ['transaction' => $data]);
+        }else if (Auth::user()->role == "Incharge"){
+            $data = Transaction::where('code', $transactionCode)->with(['user'])->first();
+            return view('Users.Incharge.ViewTransaction', ['transaction' => $data]);
         }
     }else{
         return redirect('/');
@@ -192,6 +239,12 @@ Route::get("/transactions/print-transaction/transaction-code={transactionCode}",
         if (Auth::user()->role == "Admin"){
             $data = Transaction::where('code', $transactionCode)->with(['user', 'payment'])->first();
             return view('Users.Admin.PrintDocument', ['transaction' => $data]);
+        }else if (Auth::user()->role == "Punong Barangay"){
+            $data = Transaction::where('code', $transactionCode)->with(['user', 'payment'])->first();
+            return view('Users.Kapitan.PrintDocument', ['transaction' => $data]);
+        }else if (Auth::user()->role == "Incharge"){
+            $data = Transaction::where('code', $transactionCode)->with(['user', 'payment'])->first();
+            return view('Users.Incharge.PrintDocument', ['transaction' => $data]);
         }
     }else{
         return redirect('/');
@@ -203,6 +256,12 @@ Route::get("/resident-accounts/view-account/user-code={userCode}", function($use
         if (Auth::user()->role == "Admin"){
             $data = User::where('userCode', $userCode)->first();
             return view('Users.Admin.ViewResidentAccount', ['user' => $data]);
+        }else if (Auth::user()->role == "Punong Barangay"){
+            $data = User::where('userCode', $userCode)->first();
+            return view('Users.Kapitan.ViewResidentAccount', ['user' => $data]);
+        }else if (Auth::user()->role == "Incharge"){
+            $data = User::where('userCode', $userCode)->first();
+            return view('Users.Incharge.ViewResidentAccount', ['user' => $data]);
         }
     }else{
         return redirect('/');
@@ -336,6 +395,12 @@ Route::get('/get-transactions/user-code={userCode}', function($userCode){
     if (Auth::user()->role == "Admin"){
         $data = Transaction::with(['user'])->get();
         return response()->json($data);
+    }else if (Auth::user()->role == "Punong Barangay"){
+        $data = Transaction::with(['user'])->get();
+        return response()->json($data);
+    }else if (Auth::user()->role == "Incharge"){
+        $data = Transaction::with(['user'])->get();
+        return response()->json($data);
     }else{
         $data = Transaction::where('userCode', $userCode)->with(['user'])->get();
         return response()->json($data);
@@ -354,7 +419,7 @@ Route::get('/get-latest-ced-or-no', function(){
 });
 
 Route::get("/get-resident-accounts", function(){
-    $data = User::where("role", "!=", "Admin")->get();
+    $data = User::where("role", "User")->get();
     return response()->json($data);
 });
 
@@ -405,7 +470,7 @@ Route::get('/get-announcements', function(){
 });
 
 Route::get('/get-announcement/announcement-id={annId}', function($annId){
-    $data = Announcement::find($annId);
+    $data = Announcement::with(['image'])->find($annId);
     return response()->json($data);
 });
 

@@ -91,7 +91,7 @@
                             <label>Role</label>
                             <select class="form-select select2" name="role" required>
                                 <option value="Punong Barangay">Punong Barangay</option>
-                                <option value="Secretary">Secretary</option>
+                                <option value="Incharge">Incharge</option>
                                 <option value="Health Worker">Health Worker</option>
                             </select>
                         </div>

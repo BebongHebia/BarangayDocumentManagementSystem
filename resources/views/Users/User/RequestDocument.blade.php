@@ -87,7 +87,7 @@
                                         <label>Document Type</label>
                                         <select class="form-control" id="documentType" name="type" style="width:100%">
                                             <option selected disabled>Please Select Document Type</option>
-                                            <option value="Certificate Indigency">Certificate of Indigency</option>
+                                            <option value="Certificate of Indigency">Certificate of Indigency</option>
                                             <option value="Barangay Clearance">Barangay Clearance</option>
                                             <option value="Barangay Certification">Barangay Certification</option>
                                         </select>

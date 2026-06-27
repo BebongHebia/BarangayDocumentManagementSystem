@@ -1,9 +1,13 @@
-@extends('Users.Admin.Sidebar')
+@extends('Users.User.Sidebar')
 @section('sidebar')
 @include('Components.CalendarActivity.CreateCalendarActivity')
 @include('Components.CalendarActivity.EditCalendarActivityModal')
 @include('Components.CalendarActivity.RemoveCalendarActivityModal')
 @include('Components.CalendarActivity.UploadCalendarActivityImage')
+@include('Components.CalendarActivity.ViewCalendarOfActivityModal')
+
+
+
 <style>
     #calendarActContainer {
         width: 100%;
@@ -41,15 +45,6 @@
                             <h5 class="card-title">Calendar of Activities Details</h5>
                         </div>
                         <div class="card-body">
-
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <button class="btn btn-dark" data-toggle="modal" data-target="#CreateCalendarActivity">
-                                        <i class="fas fa-plus"></i> Add Calendar Activity
-                                    </button>
-                                </div>
-                            </div>
-
                             <div class="row mt-2" id="calendarActivityPanel">
                             </div>
                         </div>

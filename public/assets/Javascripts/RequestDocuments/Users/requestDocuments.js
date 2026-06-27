@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Show the selected card
         switch (documentValue) {
-            case "Certificate Indigency":
+            case "Certificate of Indigency":
                 if (cardIndigency) {
                     cardIndigency.style.display = "block";
                     console.log("Showing Certificate of Indigency");

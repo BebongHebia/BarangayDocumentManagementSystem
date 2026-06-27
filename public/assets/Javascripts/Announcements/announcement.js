@@ -20,6 +20,7 @@ function addAnnouncement(event) {
 
 displayAnnouncements();
 function displayAnnouncements() {
+    var userRole = $("#userRole").val();
     $.ajax({
         type: "get",
         url: "/get-announcements",
@@ -29,7 +30,7 @@ function displayAnnouncements() {
                 // Determine image URL
                 let imageHtml = "";
                 if (announcement.image && announcement.image.path) {
-                    imageHtml = `<img src="${baseUrl}/storage/${announcement.image.path}" alt="Announcement Image">`;
+                    imageHtml = `<img src="storage/${announcement.image.path}" alt="Announcement Image">`;
                 } else {
                     imageHtml = `
                         <div class="no-image">
@@ -38,9 +39,39 @@ function displayAnnouncements() {
                     `;
                 }
 
+                // Check if user is "User" to hide buttons
+                const isUser = userRole === "User";
+
+                // Build buttons HTML only if not a User
+                let buttonsHtml = "";
+                if (!isUser) {
+                    buttonsHtml = `
+                        <div class="announcementActions">
+                            <button class="btn-announcement btn-upload" onclick="event.stopPropagation(); openUploadAnnouncementImageModal(${announcement.id})">
+                                <i class="fas fa-upload"></i> Upload
+                            </button>
+                            <button class="btn-announcement btn-edit" onclick="event.stopPropagation(); openEditAnnouncementModal(${announcement.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-announcement btn-delete" onclick="event.stopPropagation(); openDeleteAnnouncementModal(${announcement.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
+                }
+
+                // For Users: click to view, for others: click to edit (or you can make both view)
+                let clickHandler = "";
+                if (isUser) {
+                    clickHandler = `onclick="openViewAnnouncementModal(${announcement.id})"`;
+                } else {
+                    // Non-users can also view if you want, or edit
+                    clickHandler = `onclick="openViewAnnouncementModal(${announcement.id})"`; // or openEditAnnouncementModal
+                }
+
                 rows += `
                     <div class="col-sm-3">
-                        <div class="announcementContainer">
+                        <div class="announcementContainer" ${clickHandler} style="cursor: pointer;">
                             <!-- Image Section -->
                             <div class="announcementImage">
                                 ${imageHtml}
@@ -56,24 +87,69 @@ function displayAnnouncements() {
                                 <p><strong>How:</strong> ${announcement.how}</p>
                             </div>
 
-                            <!-- Buttons Section -->
-                            <div class="announcementActions">
-                                <button class="btn-announcement btn-upload" onclick="openUploadAnnouncementImageModal(${announcement.id})">
-                                    <i class="fas fa-upload"></i> Upload
-                                </button>
-                                <button class="btn-announcement btn-edit" onclick="openEditAnnouncementModal(${announcement.id})">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn-announcement btn-delete" onclick="openDeleteAnnouncementModal(${announcement.id})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
+                            ${buttonsHtml}
                         </div>
                     </div>
                 `;
             });
 
             $("#announcementPanel").html(rows);
+        },
+    });
+}
+
+function openViewAnnouncementModal(announcementId) {
+    // Fetch the specific announcement data using your URL format
+    $.ajax({
+        type: "get",
+        url: baseUrl + "/get-announcement/announcement-id=" + announcementId,
+        success: function (data) {
+            // Update the image
+            let imageHtml = "";
+            if (data.image && data.image.path) {
+                imageHtml = `<img src="storage/${data.image.path}" alt="Announcement Image" style="width: 100%; height: 100%; object-fit: cover;">`;
+            } else {
+                imageHtml = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #999; font-size: 14px; background: #f9f9f9; border: 2px dashed #ddd; border-radius: 6px;">
+                        <i class="fas fa-image" style="margin-right: 8px;"></i> No Image
+                    </div>
+                `;
+            }
+            $("#viewAnnouncementImage").html(imageHtml);
+
+            // Update the details
+            let detailsHtml = `
+                <h3 style="margin-top: 0; color: #333;">${data.title || "Announcement"}</h3>
+                <hr>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>Description:</strong><br>
+                    ${data.description || "No description available"}
+                </p>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>What:</strong> ${data.what || "N/A"}
+                </p>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>When:</strong> ${data.when || "N/A"}
+                </p>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>Where:</strong> ${data.where || "N/A"}
+                </p>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>How:</strong> ${data.how || "N/A"}
+                </p>
+            `;
+            $("#viewAnnouncementDetails").html(detailsHtml);
+
+            // Show the modal
+            $("#ViewAnnouncement").modal("show");
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching announcement details:", error);
+            if (typeof toastr !== "undefined") {
+                toastr.error("Failed to load announcement details");
+            } else {
+                alert("Failed to load announcement details");
+            }
         },
     });
 }

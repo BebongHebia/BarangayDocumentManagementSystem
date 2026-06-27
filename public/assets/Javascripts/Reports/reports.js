@@ -226,6 +226,5 @@ function getFilterType() {
     if (filterType == "daily") {
         filterDate = $("#filterDate").val();
     }
-
     console.log(filterDate);
 }

@@ -58,7 +58,7 @@
                 <img src="{{ asset('assets/template/adminLTE/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image" />
             </div>
             <div class="info">
-                <a href="{{ url('/profile') }}" class="d-block">{{ auth()->user()->completeName }}</a>
+                <a href="#" class="d-block">{{ auth()->user()->completeName }}</a>
             </div>
         </div>
 
@@ -77,14 +77,45 @@
                     </a>
                 </li>
 
+
+
                 <li class="nav-item">
                     <a href="{{ url('/transactions') }}" class="nav-link">
-                        <i class="nav-icon far fa-file"></i>
+                        <i class="nav-icon far fa-image"></i>
                         <p>Transactions</p>
                     </a>
                 </li>
 
-                <hr>
+                <li class="nav-item">s
+                    <a href="{{ url('/masterlists') }}" class="nav-link">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>
+                            Accounts
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('/masterlists') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Master Lists</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('/resident-accounts') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Resident Account</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/staff-officials') }}" class="nav-link">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>Staffs & Official</p>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a href="{{ url('/organization-chart') }}" class="nav-link">
@@ -114,6 +145,13 @@
                     <a href="{{ url('/announcement') }}" class="nav-link">
                         <i class="nav-icon far fa-image"></i>
                         <p>Announcements</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/reports') }}" class="nav-link">
+                        <i class="nav-icon far fa-image"></i>
+                        <p>Reports</p>
                     </a>
                 </li>
 

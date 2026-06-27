@@ -1,4 +1,4 @@
-@extends('Users.Admin.Sidebar')
+@extends('Users.Kapitan.Sidebar')
 @section('sidebar')
 @include('Components.CalendarActivity.CreateCalendarActivity')
 @include('Components.CalendarActivity.EditCalendarActivityModal')

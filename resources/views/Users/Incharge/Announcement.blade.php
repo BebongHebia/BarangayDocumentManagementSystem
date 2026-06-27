@@ -1,4 +1,4 @@
-@extends('Users.Admin.Sidebar')
+@extends('Users.Incharge.Sidebar')
 @section('sidebar')
 @include("Components.Announcement.AddAnnouncementModal")
 @include("Components.Announcement.EditAnnouncementModal")
@@ -156,8 +156,8 @@
 
     <!-- Main content -->
     <section class="content">
+        <input type="hidden" id="userRole" value="{{Auth::user()->role}}">
         <div class="container-fluid">
-            <input type="hidden" id="userRole" value="{{Auth::user()->role}}">
             <div class="card card-dark">
                 <div class="card-header">
                     <h5 class="card-title">Announcemnt Details</h5>

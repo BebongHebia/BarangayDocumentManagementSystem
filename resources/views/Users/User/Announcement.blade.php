@@ -1,9 +1,10 @@
-@extends('Users.Admin.Sidebar')
+@extends('Users.User.Sidebar')
 @section('sidebar')
 @include("Components.Announcement.AddAnnouncementModal")
 @include("Components.Announcement.EditAnnouncementModal")
 @include("Components.Announcement.DeleteAnnouncementModal")
 @include("Components.Announcement.UploadAnnouncementImage")
+@include("Components.Announcement.ViewAnnouncementModal")
 <style>
     /* Container Design */
     .announcementContainer {
@@ -156,20 +157,13 @@
 
     <!-- Main content -->
     <section class="content">
+        <input type="hidden" id="userRole" value="{{Auth::user()->role}}">
         <div class="container-fluid">
-            <input type="hidden" id="userRole" value="{{Auth::user()->role}}">
             <div class="card card-dark">
                 <div class="card-header">
                     <h5 class="card-title">Announcemnt Details</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <button class="btn btn-dark" data-toggle="modal" data-target="#AddAnnouncement">
-                                <i class="fas fa-plus"></i> Add Announcement
-                            </button>
-                        </div>
-                    </div>
                     <div class="row mt-2" id="announcementPanel">
 
                     </div>

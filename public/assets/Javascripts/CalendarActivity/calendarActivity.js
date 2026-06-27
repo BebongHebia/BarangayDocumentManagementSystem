@@ -17,8 +17,8 @@ function addCalendarActivity(event) {
     });
 }
 displayCalendarActivity();
-
 function displayCalendarActivity() {
+    var userRole = $("#userRole").val();
     $.ajax({
         type: "get",
         url: "/get-calendar-activity",
@@ -85,9 +85,39 @@ function displayCalendarActivity() {
                     statusBadge = "badge-danger";
                 }
 
+                // Check if user is "User" to hide buttons
+                const isUser = userRole === "User";
+
+                // Build buttons HTML only if not a User
+                let buttonsHtml = "";
+                if (!isUser) {
+                    buttonsHtml = `
+                        <div class="btn-group w-100" role="group">
+                            <button class="btn btn-warning btn-sm" onclick="event.stopPropagation(); openUploadCalendarActiModal(${activity.id})">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="event.stopPropagation(); openEditCalendarActModal(${activity.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); openDeleteCalendarActModal(${activity.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                // Determine click handler based on user role
+                let clickHandler = "";
+                if (isUser) {
+                    clickHandler = `onclick="openViewCalendarActivityModal(${activity.id})"`;
+                } else {
+                    // For non-users, clicking opens the edit modal (or you can make it view too)
+                    clickHandler = `onclick="openViewCalendarActivityModal(${activity.id})"`;
+                }
+
                 rows += `
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <div class="card shadow-sm mb-4" style="border-radius: 10px; overflow: hidden;">
+                        <div class="card shadow-sm mb-4" style="border-radius: 10px; overflow: hidden; cursor: pointer;" ${clickHandler}>
                             <div class="card-body p-0">
                                 <img src="${imgSrc}" alt="${activity.activity}" 
                                      class="img-fluid" 
@@ -106,17 +136,7 @@ function displayCalendarActivity() {
                                         <p><span class="badge ${statusBadge}">${activity.status}</span></p>
                                     </div>
                                     
-                                    <div class="btn-group w-100" role="group">
-                                        <button class="btn btn-warning btn-sm" onclick="openUploadCalendarActiModal(${activity.id})">
-                                            <i class="fas fa-image"></i>
-                                        </button>
-                                        <button class="btn btn-info btn-sm" onclick="openEditCalendarActModal(${activity.id})">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" onclick="openDeleteCalendarActModal(${activity.id})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
+                                    ${buttonsHtml}
                                 </div>
                             </div>
                         </div>
@@ -529,3 +549,97 @@ $(document).ready(function () {
 });
 
 /** ------------------------------------ */
+
+function openViewCalendarActivityModal(activityId) {
+    // Fetch the specific activity data
+    $.ajax({
+        type: "get",
+        url: baseUrl + "/get-calendar-act/act-id=" + activityId,
+        success: function (data) {
+            // Helper function to get image URL (reuse the same logic)
+            function getImageUrl(imageData) {
+                let defaultImage = "assets/images/galleryIcon.png";
+
+                if (!imageData) {
+                    return defaultImage;
+                }
+
+                if (typeof imageData === "string") {
+                    return imageData;
+                }
+
+                if (typeof imageData === "object") {
+                    if (imageData.path) {
+                        return imageData.path;
+                    }
+                    if (imageData.url) {
+                        return imageData.url;
+                    }
+                    if (imageData.fileName) {
+                        return `/storage/calendar_activity_images/${imageData.fileName}`;
+                    }
+                    if (
+                        imageData.toString &&
+                        imageData.toString().startsWith("http")
+                    ) {
+                        return imageData.toString();
+                    }
+                }
+
+                return defaultImage;
+            }
+
+            // Get the image source
+            const imgSrc = getImageUrl(data.get_cal_act_image);
+
+            // Update the image
+            let imageHtml = `
+                <img src="${imgSrc}" alt="${data.activity}" 
+                     style="width: 100%; height: 100%; object-fit: cover;"
+                     onerror="this.onerror=null; this.src='assets/images/galleryIcon.png';">
+            `;
+            $("#viewActivityImage").html(imageHtml);
+
+            // Determine status badge color
+            let statusBadge = "badge-secondary";
+            if (data.status === "Active" || data.status === "Ongoing") {
+                statusBadge = "badge-success";
+            } else if (data.status === "Completed" || data.status === "Done") {
+                statusBadge = "badge-primary";
+            } else if (data.status === "Cancelled") {
+                statusBadge = "badge-danger";
+            }
+
+            // Update the details
+            let detailsHtml = `
+                <h3 style="margin-top: 0; color: #333;">${data.activity || "Activity"}</h3>
+                <hr>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>Description:</strong><br>
+                    ${data.description || "No description available"}
+                </p>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>Start Date:</strong> ${data.dateStart || "N/A"}
+                </p>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>End Date:</strong> ${data.dateEnd || "N/A"}
+                </p>
+                <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                    <strong>Status:</strong> <span class="badge ${statusBadge}">${data.status || "N/A"}</span>
+                </p>
+            `;
+            $("#viewActivityDetails").html(detailsHtml);
+
+            // Show the modal
+            $("#ViewCalendarOfActivityModal").modal("show");
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching activity details:", error);
+            if (typeof toastr !== "undefined") {
+                toastr.error("Failed to load activity details");
+            } else {
+                alert("Failed to load activity details");
+            }
+        },
+    });
+}

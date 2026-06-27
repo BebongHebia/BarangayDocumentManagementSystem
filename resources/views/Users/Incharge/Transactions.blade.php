@@ -1,19 +1,9 @@
-@extends('Users.Admin.Sidebar')
+@extends('Users.Incharge.sidebar')
 @section('sidebar')
-@include('Components.CalendarActivity.CreateCalendarActivity')
-@include('Components.CalendarActivity.EditCalendarActivityModal')
-@include('Components.CalendarActivity.RemoveCalendarActivityModal')
-@include('Components.CalendarActivity.UploadCalendarActivityImage')
-<style>
-    #calendarActContainer {
-        width: 100%;
-        border: 1px solid rgb(172, 172, 172);
-        box-shadow: 3px 3px 3px gray;
-        border-radius: 5px;
-        padding: 5px;
-    }
+@include('Components.Transactions.Admin.CreateTransactionModal')
+<input type="hidden" id="mainUserCode" value="{{ auth()->user()->userCode }}">
 
-</style>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -21,7 +11,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1 class="m-0">Calendar of Activities</h1>
+                    <h1 class="m-0">Transactions</h1>
                 </div>
             </div>
             <!-- /.row -->
@@ -33,29 +23,33 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="userRole" value="{{Auth::user()->role}}">
+
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h5 class="card-title">Calendar of Activities Details</h5>
+                            <h5 class="card-title">Lists of Transactions</h5>
                         </div>
                         <div class="card-body">
-
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <button class="btn btn-dark" data-toggle="modal" data-target="#CreateCalendarActivity">
-                                        <i class="fas fa-plus"></i> Add Calendar Activity
+                                    <button class="btn btn-dark" data-toggle="modal" data-target="#CreateTransactionModal">
+                                        <i class="fas fa-plus"></i> Create Transactions
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="row mt-2" id="calendarActivityPanel">
+                            <div class="row mt-2">
+                                <div class="col-sm-12">
+                                    @include("Components.Transactions.Admin.TransactionTable")
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
 
         </div>
         <!-- /.container-fluid -->
@@ -63,5 +57,5 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-<script src="{{ asset('assets/Javascripts/CalendarActivity/calendarActivity.js') }}"></script>
+<script src="{{ asset('assets/Javascripts/Transactions/Admin/transactions.js') }}"></script>
 @endsection
