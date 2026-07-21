@@ -31,7 +31,7 @@ class UserController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 
     public function addUser(Request $request){
@@ -67,20 +67,20 @@ class UserController extends Controller
     }
 
     public function register(Request $request){
-
+    $completeName = $request->firstName . " " . substr($request->middleName, 0, 1) . " " . $request->lastName;
         // Create the user
         $user = User::create([
             'listCode' => $request->listCode,
-            'completeName' => $request->completeName,
-            'purok' => "N/A",
-            'sex' => "N/A",
-            'bday' => "N/A",
-            'civilStatus' => "N/A",
-            'placeOfBirth' => "N/A",
-            'citizenship' => "N/A",
-            'currentAddress' => "N/A",
-            'profession' => "N/A",
-            'phone' => $request->phone,
+            'completeName' => $completeName,
+            'purok' => $request->purok,
+            'sex' => $request->sex,
+            'bday' => $request->birthdate,
+            'civilStatus' => $request->civilStatus,
+            'placeOfBirth' =>  $request->placeOfBirth,
+            'citizenship' => $request->citizenship,
+            'currentAddress' => $request->address,
+            'profession' => $request->profession,
+            'phone' => $request->contact,
             'role' => "User",
             'status' => "Active",
             'userCode' => date("Ymdhis"),

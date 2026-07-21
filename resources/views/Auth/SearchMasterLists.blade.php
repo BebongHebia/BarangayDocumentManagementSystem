@@ -42,10 +42,10 @@
     <!-- Search Buttons -->
     <div class="row mt-3 mb-3">
         <div class="col-sm-12">
-            <button type="button" id="searchBtn" class="btn btn-primary">
+            <button type="button" id="searchBtn" class="btn btn-success">
                 <i class="fas fa-search"></i> Search
             </button>
-            <button type="button" id="resetBtn" class="btn btn-secondary">
+            <button type="button" id="resetBtn" class="btn btn-warning">
                 <i class="fas fa-undo"></i> Reset
             </button>
         </div>
@@ -55,7 +55,7 @@
     <div class="row mt-2">
         <div class="col-sm-12">
             <table class="table table-hover table-bordered table-striped" id="dataTable">
-                <thead class="table table-warning">
+                <thead class="table table-success">
                     <tr>
                         <th>No.#</th>
                         <th>Ref. Code</th>

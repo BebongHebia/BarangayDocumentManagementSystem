@@ -1,0 +1,49 @@
+ .register-box {
+            width: 700px;
+            /* increased from 500px */
+            max-width: 95%;
+        }
+
+        .form-section-title {
+            font-weight: 600;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 6px;
+            margin-top: 20px;
+            margin-bottom: 16px;
+            color: #007bff;
+            font-size: 1.1rem;
+        }
+
+        .card-body {
+            padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+        }
+
+        .register-box .card-body .input-group {
+            margin-bottom: 0.8rem;
+        }
+
+        .register-box .card-body .row .col-12 .btn-block {
+            margin-bottom: 0.5rem;
+        }
+
+        .alert {
+            padding: 0.5rem 1rem;
+        }
+
+        .alert h5 {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Responsive: on smaller screens, use full width */
+        @media (max-width: 768px) {
+            .register-box {
+                width: 100%;
+                padding: 0 10px;
+            }
+        }
+
+        /* small improvement: better spacing for select & date */
+        .input-group .form-control[type="date"] {
+            min-width: 0;
+        }

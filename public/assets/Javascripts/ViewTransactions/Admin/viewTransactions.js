@@ -52,17 +52,47 @@ function setProcessing(event) {
 }
 
 function openApproveTransactionModal(transactionCode) {
-    console.log(transactionCode);
-
     $.ajax({
         type: "get",
         url: baseUrl + "/get-transactions/transaction-code=" + transactionCode,
         success: function (data) {
+            var checkCedula = data.cedula ? data.cedula.cedulaNo : "";
+
+            if (checkCedula == "") {
+                $("#cedulaNo").val("000000 - Cedula Expired Cannot Proceed");
+                $("#btnSetApprove").prop("disabled", true);
+            } else {
+                if (getDateDifference(data.cedula.validity) <= 0) {
+                    $("#cedulaNo").val(
+                        "000000 - Cedula Expired Cannot Proceed",
+                    );
+                    $("#btnSetApprove").prop("disabled", true);
+                } else {
+                    $("#cedulaNo").val(data.cedula.cedulaNo);
+                }
+            }
+
             $("#aprTransactionCode").val(data.code);
             $("#aprUserCode").val(data.user.userCode);
         },
     });
     $("#SetApproveModal").modal("show");
+}
+
+function getDateDifference(dateStr) {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    const targetDate = new Date(dateStr);
+    targetDate.setHours(0, 0, 0, 0);
+
+    // Calculate difference in milliseconds
+    const diffTime = targetDate - currentDate;
+
+    // Convert to days
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
 }
 
 function openRejectTransactionModal(transactionCode) {
@@ -78,26 +108,7 @@ function openRejectTransactionModal(transactionCode) {
     });
     $("#SetRejectModal").modal("show");
 }
-getLatestCedulaNo();
 getLatestORNo();
-
-function getLatestCedulaNo() {
-    $.ajax({
-        type: "get",
-        url: "/get-latest-ced-or-no",
-        success: function (data) {
-            if (data == null) {
-                $("#cedulaNo").val(0);
-            } else {
-                if (data.cedulaNo == "" || data.cedulaNo == null) {
-                    $("#cedulaNo").val(1);
-                } else {
-                    $("#cedulaNo").val(data.cedulaNo + 1);
-                }
-            }
-        },
-    });
-}
 
 function getLatestORNo() {
     $.ajax({
@@ -136,6 +147,18 @@ function approveRequest(event) {
                 if (data.redirect_url) {
                     window.location.href = data.redirect_url;
                 }
+            });
+        },
+        error: function (xhr, status, error) {
+            // Handle errors here
+            let errorMessage =
+                "Invalid Process. Please check input forms and try again";
+
+            swal.fire({
+                title: "Error",
+                text: errorMessage,
+                icon: "error",
+                confirmButtonColor: "#d33",
             });
         },
     });

@@ -20,7 +20,7 @@
                     <input type="date" name="validity" class="form-control">
 
                     <label>Cedula No.#</label>
-                    <input type="number" name="cedulaNo" class="form-control" id="cedulaNo">
+                    <input type="text" name="cedulaNo" class="form-control" id="cedulaNo">
 
                     <label>Cedula Issued On</label>
                     <input type="date" name="cedIssOn" class="form-control">
@@ -65,7 +65,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Close
                 </button>
-                <button type="button" class="btn btn-dark" onclick="approveRequest(event)">
+                <button type="button" class="btn btn-dark" onclick="approveRequest(event)" id="btnSetApprove">
                     <i class="fas fa-plus"></i> Submit
                 </button>
             </div>

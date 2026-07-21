@@ -16,10 +16,17 @@
                         <option value="Barangay Clearance">Barangay Clearance</option>
                         <option value="Barangay Certification">Barangay Certification</option>
                     </select>
+                    <label>Purpose Type</label>
+                    <select class="form-control" id="editPurposeType" name="purposeType" style="width:100%" onchange="loadPurposes(this.value)">
+                        <option selected disabled>Select Purpose</option>
+                        <option value="Employment & Career">Employment & Career</option>
+                        <option value="Business & Financial">Business & Financial</option>
+                        <option value="Government Assistance & Social Services">Government Assistance & Social Services</option>
+                        <option value="Government IDs & Clearances">Government IDs & Clearances</option>
+                        <option value="Civil, Legal & General Use">Civil, Legal & General Use</option>
+                    </select>
                     <label>Purpose</label>
                     <select class="form-control" id="editPurpose" name="purpose" style="width:100%">
-                        <option value="Financial Assistance">Financial Assistance</option>
-                        <option value="Medical Assistance">Medical Assistance</option>
                     </select>
                 </form>
             </div>

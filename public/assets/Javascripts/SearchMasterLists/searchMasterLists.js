@@ -17,10 +17,10 @@ function displayMasterLists() {
 
                 if (accExists != "N/A") {
                     accStatus = "Account Exists";
-                    actionBtn = `<a href="/" class="btn btn-warning btn-sm"><i class="fas fa-arrow-right"></i> Login</a>`;
+                    actionBtn = `<a href="/" class="btn btn-success btn-sm"><i class="fas fa-arrow-right"></i> Login</a>`;
                 } else {
                     accStatus = "No account";
-                    actionBtn = `<a href="/register/list-code=${masterLists.listCode}" class="btn btn-primary btn-sm"><i class="fas fa-arrow-right"></i> Create Account</a>`;
+                    actionBtn = `<a href="/register/list-code=${masterLists.listCode}" class="btn btn-danger btn-sm"><i class="fas fa-arrow-right"></i> Create Account</a>`;
                 }
                 rows += `
                     <tr>

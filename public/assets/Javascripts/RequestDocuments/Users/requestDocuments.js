@@ -11,14 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const cardCertification = document.getElementById("cardCertification");
     const noDocumentSelected = document.getElementById("noDocumentSelected");
 
-    console.log("Elements found:", {
-        documentType: documentTypeSelect,
-        cardIndigency: cardIndigency,
-        cardClearance: cardClearance,
-        cardCertification: cardCertification,
-        noDocument: noDocumentSelected,
-    });
-
     // Function to hide all document cards
     function hideAllCards() {
         if (cardIndigency) cardIndigency.style.display = "none";
@@ -235,5 +227,66 @@ function addRequest(event) {
                 icon: "error",
             });
         },
+    });
+}
+
+function loadPurposes(purposeType) {
+    // Define the purposes for each category
+    const purposeData = {
+        "Employment & Career": [
+            "Local job applications",
+            "First-time job seekers (under RA 11261 for free government services)",
+            "Overseas employment (OFW requirements)",
+            "Professional regulation commission (PRC) exam or licensing",
+        ],
+        "Business & Financial": [
+            "New business permit application (Barangay Business Clearance)",
+            "Annual business permit renewal",
+            "Microfinance or commercial bank loan applications",
+            "Opening a personal or corporate bank account",
+        ],
+        "Government Assistance & Social Services": [
+            "Medical financial assistance (for DSWD, PCSO, or Malasakit Centers)",
+            "Educational financial assistance, scholarships, or tuition waivers",
+            "Burial or funeral assistance",
+            "Local social welfare and emergency relief programs",
+        ],
+        "Government IDs & Clearances": [
+            "National Police Clearance application",
+            "NBI Clearance application",
+            "Philippine Passport application (DFA)",
+            "Establishing residency for Voter's Registration",
+        ],
+        "Civil, Legal & General Use": [
+            "Proof of residency for utility connections (water, electricity, internet)",
+            "Proof of residency for purchasing a vehicle or property",
+            "Marriage license application",
+            "Local construction or building permit (Certificate of No Objection)",
+            "Certificate of Good Moral Character for school or legal matters",
+        ],
+    };
+
+    // Get the purpose dropdown element
+    const purposeDropdown = document.getElementById("purpose");
+
+    // Clear existing options
+    purposeDropdown.innerHTML = "";
+
+    // Add a default disabled option
+    const defaultOption = document.createElement("option");
+    defaultOption.textContent = "Select Purpose";
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    purposeDropdown.appendChild(defaultOption);
+
+    // Get the purposes for the selected type
+    const purposes = purposeData[purposeType] || [];
+
+    // Add new options
+    purposes.forEach(function (purpose) {
+        const option = document.createElement("option");
+        option.value = purpose;
+        option.textContent = purpose;
+        purposeDropdown.appendChild(option);
     });
 }

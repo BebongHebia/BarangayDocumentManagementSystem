@@ -4,6 +4,8 @@ use App\Http\Controllers\ActImageController;
 use App\Http\Controllers\AnnImageController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CalendarActivityController;
+use App\Http\Controllers\CedulaController;
+use App\Http\Controllers\CompaintIncidentReportController;
 use App\Http\Controllers\MasterListController;
 use App\Http\Controllers\ProfilePicController;
 use App\Http\Controllers\StaffOfficialController;
@@ -12,6 +14,8 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Announcement;
 use App\Models\CalendarActivity;
+use App\Models\Cedula;
+use App\Models\CompaintIncidentReport;
 use App\Models\MasterList;
 use App\Models\Payment;
 use App\Models\StaffOfficial;
@@ -24,8 +28,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 //Routes
-Route::get('/', function () {
+Route::get('/login', function () {
     return view('Auth.Login');
+});
+
+Route::get('/', function(){
+    return redirect('/login');
 });
 
 Route::get('/profile', function(){
@@ -216,6 +224,34 @@ Route::get('/reports', function(){
 });
 
 
+Route::get('/cedula', function(){
+    if (Auth::check()){
+        if (Auth::user()->role == "Admin"){
+            return view('Users.Admin.Reports');
+        }else if (Auth::user()->role == "Punong Barangay"){
+            return view('Users.Kapitan.Reports');
+        }else if (Auth::user()->role == "Incharge"){
+            return view('Users.Incharge.Cedula');
+        }else if (Auth::user()->role == "User"){
+            return view('Users.User.Cedula');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/complaints-incident-reports', function(){
+    if (Auth::check()){
+        if (Auth::user()->role == "User"){
+            return view('Users.User.ComplaintIncidentReports');
+        }else if (Auth::user()->role == "Admin"){
+            return view('Users.Admin.ComplaintIncidentReports');
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
 
 Route::get('/view-transaction/transaction-code={transactionCode}', function($transactionCode){
     if (Auth::check()){
@@ -320,6 +356,15 @@ Route::post('/add-announcement', [AnnouncementController::class, 'addAnnouncemen
 Route::post('/edit-announcement', [AnnouncementController::class, 'editAnnouncement']);
 Route::post('/delete-announcement', [AnnouncementController::class, 'deleteAnnouncement']);
 
+Route::post('/add-cedula', [CedulaController::class, 'addCedula']);
+Route::post('/edit-cedula', [CedulaController::class, 'editCedula']);
+Route::post('/delete-cedula', [CedulaController::class, 'deleteCedula']);
+
+Route::post('/add-complain-incident-report', [CompaintIncidentReportController::class, 'addComplainIncident']);
+Route::post('/edit-complain-incident-report', [CompaintIncidentReportController::class, 'editComplainIncident']);
+Route::post('/delete-complain-incident-report', [CompaintIncidentReportController::class, 'deleteComplainIncident']);
+Route::post('/action-complain-incident-report', [CompaintIncidentReportController::class, 'actionTakenComplainIncident']);
+
 //Getter Controls
 Route::get('/get-users/option={option}/filter={filter}', function($option, $filter){
     if ($option == "All"){
@@ -379,11 +424,16 @@ Route::get('/register/list-code={listCode}', function($listCode){
     if ($data > 0){
         return redirect('/');
     } else {
-        return view('Auth.Register', ['listCode' => $listCode]);
+        $masterListData = MasterList::where('listCode', $listCode)->get()->first();
+        return view('Auth.Register', ['listCode' => $listCode, 'masterListData' => $masterListData]);
     }
 
 })->name('register.check');
 
+Route::get('/get-master-list-details/list-code={listCode}', function($listCode){
+    $data = MasterList::where('listCode', $listCode)->first();
+    return response()->json($data);
+});
 
 Route::get('/get-profile-details/user-code={userCode}', function($userCode){
     $data = User::where('userCode', $userCode)->get()->first();
@@ -402,14 +452,14 @@ Route::get('/get-transactions/user-code={userCode}', function($userCode){
         $data = Transaction::with(['user'])->get();
         return response()->json($data);
     }else{
-        $data = Transaction::where('userCode', $userCode)->with(['user'])->get();
+        $data = Transaction::where('userCode', $userCode)->with(['user', 'payment'])->get();
         return response()->json($data);
     }
 
 });
 
 Route::get('/get-transactions/transaction-code={transactionCode}', function($transactionCode){
-    $data = Transaction::where('code', $transactionCode)->with(['user'])->get()->first();
+    $data = Transaction::where('code', $transactionCode)->with(['user', 'cedula'])->get()->first();
     return response()->json($data);
 });
 
@@ -482,55 +532,55 @@ Route::get('/get-announcement-image/{annId}', [AnnImageController::class, 'getIm
 Route::get('/get-transaction-reports', function(Request $request){
     try {
         Log::info('Transaction reports endpoint called', ['request' => $request->all()]);
-        
+
         $filterType = $request->get('filter_type', 'daily');
-        
+
         // Start with base query
         $query = Transaction::where('status', 'Approved')->with(['user', 'payment']);
-        
+
         switch ($filterType) {
             case 'daily':
                 if ($request->has('date')) {
                     $dateInput = $request->get('date');
                     Log::info('Raw date input:', ['date' => $dateInput]);
-                    
+
                     try {
                         // Parse the date from YYYY-MM-DD format
                         $date = Carbon::parse($dateInput);
-                        
+
                         // Create both formats for comparison
                         $format1 = $date->format('Y-m-d'); // 2026-06-12
                         $format2 = $date->format('m-d-Y'); // 06-12-2026
                         $format3 = $date->format('m/d/Y'); // 06/12/2026
-                        
+
                         Log::info('Searching for dates:', [
                             'format1' => $format1,
                             'format2' => $format2,
                             'format3' => $format3
                         ]);
-                        
+
                         // Search for any of the formats
                         $query->where(function($q) use ($format1, $format2, $format3) {
                             $q->where('dateCreated', $format1)
                               ->orWhere('dateCreated', $format2)
                               ->orWhere('dateCreated', $format3);
                         });
-                        
+
                     } catch (\Exception $e) {
                         Log::error('Date parsing error:', ['error' => $e->getMessage()]);
                     }
                 }
                 break;
-                
+
             case 'weekly':
                 if ($request->has('week')) {
                     $week = $request->get('week');
                     $year = substr($week, 0, 4);
                     $weekNumber = substr($week, 6);
-                    
+
                     $startDate = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek();
                     $endDate = Carbon::now()->setISODate($year, $weekNumber)->endOfWeek();
-                    
+
                     // Check for dates in both formats within the week range
                     $startFormats = [
                         $startDate->format('Y-m-d'),
@@ -542,7 +592,7 @@ Route::get('/get-transaction-reports', function(Request $request){
                         $endDate->format('m-d-Y'),
                         $endDate->format('m/d/Y')
                     ];
-                    
+
                     $query->where(function($q) use ($startFormats, $endFormats) {
                         foreach ($startFormats as $index => $start) {
                             $end = $endFormats[$index];
@@ -552,15 +602,15 @@ Route::get('/get-transaction-reports', function(Request $request){
                     });
                 }
                 break;
-                
+
             case 'monthly':
                 if ($request->has('month')) {
                     $month = $request->get('month');
                     $parsedDate = Carbon::parse($month);
-                    
+
                     $monthNum = $parsedDate->format('m');
                     $year = $parsedDate->format('Y');
-                    
+
                     // For MM-DD-YYYY format
                     $query->where(function($q) use ($monthNum, $year) {
                         // Check for MM-DD-YYYY format
@@ -574,15 +624,15 @@ Route::get('/get-transaction-reports', function(Request $request){
                         // Check for YYYY-MM-DD format
                         ->orWhere('dateCreated', 'like', $year . '-' . $monthNum . '-%');
                     });
-                    
+
                     Log::info('Monthly filter applied', ['month' => $monthNum, 'year' => $year]);
                 }
                 break;
-                
+
             case 'yearly':
                 if ($request->has('year')) {
                     $year = $request->get('year');
-                    
+
                     $query->where(function($q) use ($year) {
                         $q->where('dateCreated', 'like', $year . '%')    // 2026-06-12
                           ->orWhere('dateCreated', 'like', '%-' . $year)  // 06-12-2026
@@ -591,10 +641,10 @@ Route::get('/get-transaction-reports', function(Request $request){
                 }
                 break;
         }
-        
+
         $data = $query->get();
         Log::info('Query executed', ['count' => $data->count()]);
-        
+
         // If no data found, return all approved transactions for debugging
         if ($data->isEmpty()) {
             Log::info('No data found with filter');
@@ -603,17 +653,72 @@ Route::get('/get-transaction-reports', function(Request $request){
                                  ->get();
             Log::info('All approved transactions count:', ['count' => $allData->count()]);
         }
-        
+
         return response()->json($data);
-        
+
     } catch (\Exception $e) {
         Log::error('Error in transaction reports endpoint', [
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString()
         ]);
-        
+
         return response()->json([
             'error' => $e->getMessage()
         ], 500);
     }
+});
+
+Route::get('/dashboard-get-transactions/option={option}/filter={filter}', function($option, $filter){
+    if ($option == "All"){
+        $data = Transaction::with(['user', 'payment'])->get();
+        return response()->json($data);
+    }else{
+        if ($option == "Type"){
+            $data = Transaction::where('type', $filter)->with(['user', 'payment'])->get();
+            return response()->json($data);
+        }else if ($option == "Purpose"){
+            $data = Transaction::where('purpose', $filter)->with(['user', 'payment'])->get();
+            return response()->json($data);
+        }else if ($option == "Date"){
+
+            Log::info('Date filter received: ' . $filter);
+            Log::info('Filter type: ' . gettype($filter));
+            $data = Transaction::where('dateCreated', $filter)->with(['user', 'payment'])->get();
+            return response()->json($data);
+        }
+    }
+});
+
+Route::get('/get-cedula/userCode={userCode}', function($userCode){
+    $data = Cedula::where('userCode', $userCode)->get();
+    return response()->json($data);
+});
+
+Route::get('/get-cedula/ced-id={cedId}', function($cedId){
+    $data = Cedula::find($cedId);
+    return response()->json($data);
+});
+
+Route::get('/get-complain-incident/usercode={userCode}', function($userCode){
+
+    if (Auth::user()->role == "Admin"){
+        $data = CompaintIncidentReport::all();
+        return response()->json($data);
+    }else if (Auth::user()->role == "User"){
+        $data = CompaintIncidentReport::where('userCode', $userCode)->get();
+        return response()->json($data);
+    }
+
+
+});
+
+Route::get('/get-complain-incident-report/complaintIncident-id={complaintID}', function($complaintID){
+    $data = CompaintIncidentReport::find($complaintID);
+    return response()->json($data);
+});
+
+
+//Landing Page Routes
+Route::get('/bdms-home', function(){
+    return view('Landing.index');
 });

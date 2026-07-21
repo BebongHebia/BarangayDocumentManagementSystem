@@ -13,6 +13,7 @@ class Transaction extends Model
         'status',
         'code',
         'purpose',
+        'purposeType',
         'validity',
         'remarks',
         'dateSched',
@@ -24,5 +25,10 @@ class Transaction extends Model
 
     public function payment(){
         return $this->belongsTo(Payment::class, 'code', 'tranCode');
+    }
+
+    public function cedula(){
+        return $this->hasOne(Cedula::class, 'userCode', 'userCode')
+                ->latest('id');
     }
 }

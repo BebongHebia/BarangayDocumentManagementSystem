@@ -7,6 +7,7 @@ use App\Models\SmsQue;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -17,6 +18,7 @@ class TransactionController extends Controller
             'dateCreated' => date("m-d-Y"),
             'status' => 'Pending',
             'code' => date("Ymdhis"),
+            'purposeType' => $request->purposeType,
             'purpose' => $request->purpose,
             'validity' => "N/A",
             'remarks' => "N/A",
@@ -24,9 +26,9 @@ class TransactionController extends Controller
         ]);
 
         SmsQue::create([
-            "userCode" => auth()->user()->userCode,
-            "name" => auth()->user()->userCode,
-            "phone" => auth()->user()->phone,
+            "userCode" => Auth::user()->userCode,
+            "name" =>  Auth::user()->userCode,
+            "phone" =>  Auth::user()->phone,
             "transactionCode" => $transaction->code,
             "docType" => $transaction->type,
             "smsStatus" => "Pending",
@@ -35,7 +37,7 @@ class TransactionController extends Controller
             "remarks" => "Your Request has been processed. please stay tuned to further notice and approval",
         ]);
 
-        if (auth()->user()->role == "Admin"){
+        if ( Auth::user()->role == "Admin"){
             return response()->json();
         }else{
             return response()->json([
@@ -49,6 +51,7 @@ class TransactionController extends Controller
     public function editTransaction(Request $request){
         $data = Transaction::find($request->transactionId);
         $data->type = $request->type;
+        $data->purposeType = $request->purposeType;
         $data->purpose = $request->purpose;
         $data->save();
         return response()->json();

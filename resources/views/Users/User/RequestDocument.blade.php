@@ -92,11 +92,27 @@
                                             <option value="Barangay Certification">Barangay Certification</option>
                                         </select>
 
-                                        <label>Select Purpose</label>
-                                        <select class="form-control" id="purpose" name="purpose" style="width:100%">
-                                            <option selected disabled>Please Select Purpose</option>
-                                            <option value="Financial Assistance">Medical Assistance</option>
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Purpose Type</label>
+                                                <select class="form-select select2" style="width:100%" name="purposeType" id="purposeType" onchange="loadPurposes(this.value)">
+                                                    <option selected disabled>Select Purpose</option>
+                                                    <option value="Employment & Career">Employment & Career</option>
+                                                    <option value="Business & Financial">Business & Financial</option>
+                                                    <option value="Government Assistance & Social Services">Government Assistance & Social Services</option>
+                                                    <option value="Government IDs & Clearances">Government IDs & Clearances</option>
+                                                    <option value="Civil, Legal & General Use">Civil, Legal & General Use</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Select Purpose</label>
+                                                <select class="form-control" id="editPurpose" name="purpose" style="width:100%">
+                                                    <option selected disabled>Select Purpose</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
 
                                         <div class="row mt-2">
                                             <div class="col-sm-4">
@@ -105,7 +121,7 @@
                                             </div>
                                             <div class="col-sm-2">
                                                 <label>Birthdate</label>
-                                                <input type="date" name="birthdate" id="birthdate" class="form-control">
+                                                <input type="date" name="birthdate" id="birthdate" class="form-control" readonly>
                                             </div>
                                             <div class="col-sm-2">
                                                 <label>Age</label>
@@ -113,7 +129,7 @@
                                             </div>
                                             <div class="col-sm-2">
                                                 <label>Civil Status</label>
-                                                <select class="form-control" name="civilStatus" id="civilStatus" style="width:100%">
+                                                <select class="form-control" name="civilStatus" id="civilStatus" style="width:100%" readonly>
                                                     <option value="Single">Single</option>
                                                     <option value="Married">Married</option>
                                                     <option value="Widowed">Widowed</option>
@@ -122,7 +138,7 @@
                                             </div>
                                             <div class="col-sm-2">
                                                 <label>Sex</label>
-                                                <select class="form-control" name="sex" id="sex" style="width:100%">
+                                                <select class="form-control" name="sex" id="sex" style="width:100%" readonly>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
                                                 </select>
