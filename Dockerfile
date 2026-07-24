@@ -6,26 +6,36 @@ WORKDIR /var/www/html
 
 USER root
 
-# Install Node.js
+# Install Node.js and PostgreSQL driver
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
+    apt-get update && \
+    apt-get install -y nodejs php-pgsql
 
-# Install dependencies
+# Install composer dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Build assets
+# Install npm dependencies and build assets
 RUN npm install && npm run build
 
-# ⚠️ ADD THIS: Run migrations before caching
+# Create storage directories and set permissions
+RUN mkdir -p /var/www/html/storage/logs \
+    /var/www/html/storage/framework/cache \
+    /var/www/html/storage/framework/sessions \
+    /var/www/html/storage/framework/views && \
+    chmod -R 775 /var/www/html/storage && \
+    chmod -R 775 /var/www/html/bootstrap/cache
+
+# Run migrations
 RUN php artisan migrate --force
 
-# Cache config, routes, and views
-RUN php artisan config:cache && \
+# Clear and rebuild cache (THIS FIXES THE HEADER ERROR)
+RUN php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan view:clear && \
+    php artisan route:clear && \
+    php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache
-
-# Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 USER www-data
 
