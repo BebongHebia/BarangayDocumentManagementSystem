@@ -1,6 +1,14 @@
-FROM richarvey/nginx-php-fpm:2.1.2
+FROM serversideup/php:8.3-fpm-nginx
 
-COPY . /var/www/html
+COPY --chown=www-data:www-data . /var/www/html
+
+WORKDIR /var/www/html
+
+USER root
+
+# Install Node.js and npm for asset building
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
 
 # Install composer dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
@@ -16,5 +24,6 @@ RUN php artisan config:cache && \
 # Permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+USER www-data
+
 EXPOSE 8080
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
