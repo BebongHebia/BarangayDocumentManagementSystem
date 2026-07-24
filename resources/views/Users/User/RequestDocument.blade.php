@@ -106,7 +106,7 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Select Purpose</label>
-                                                <select class="form-control" id="editPurpose" name="purpose" style="width:100%">
+                                                <select class="form-control" id="purpose" name="purpose" style="width:100%">
                                                     <option selected disabled>Select Purpose</option>
                                                 </select>
                                             </div>

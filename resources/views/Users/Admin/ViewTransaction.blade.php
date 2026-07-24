@@ -125,11 +125,10 @@
                                     <img src="{{ asset('assets/images/CertificateOfIndigency.jpeg') }}" class="img-fluid">
                                     @elseif ($transaction->type == "Barangay Clearance")
                                     <img src="{{ asset('assets/images/BarangayClearance.jpeg') }}" class="img-fluid">
-                                    @elseif ($transaction->type == "Barangay Certificatio")
+                                    @elseif ($transaction->type == "Barangay Certification")
                                     <img src="{{ asset('assets/images/BarangayCertification.jpeg') }}" class="img-fluid">
                                     @endif
                                 </div>
-
                             </div>
 
 

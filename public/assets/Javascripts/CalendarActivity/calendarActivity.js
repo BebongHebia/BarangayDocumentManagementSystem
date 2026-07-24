@@ -119,23 +119,23 @@ function displayCalendarActivity() {
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                         <div class="card shadow-sm mb-4" style="border-radius: 10px; overflow: hidden; cursor: pointer;" ${clickHandler}>
                             <div class="card-body p-0">
-                                <img src="${imgSrc}" alt="${activity.activity}" 
-                                     class="img-fluid" 
+                                <img src="${imgSrc}" alt="${activity.activity}"
+                                     class="img-fluid"
                                      style="height: 180px; width: 100%; object-fit: cover;"
                                      onerror="this.onerror=null; this.src='assets/images/galleryIcon.png';">
-                                
+
                                 <div class="p-3">
                                     <h5 class="card-title text-truncate"><b>${activity.activity}</b></h5>
                                     <p class="card-text text-muted" style="font-size: 13px; height: 40px; overflow: hidden;">
                                         ${activity.description || "No description"}
                                     </p>
-                                    
+
                                     <div class="mt-2" style="font-size: 12px;">
                                         <p><i class="fas fa-calendar-alt"></i> ${activity.dateStart}</p>
                                         <p><i class="fas fa-calendar-check"></i> ${activity.dateEnd}</p>
                                         <p><span class="badge ${statusBadge}">${activity.status}</span></p>
                                     </div>
-                                    
+
                                     ${buttonsHtml}
                                 </div>
                             </div>
@@ -243,6 +243,7 @@ function openUploadCalendarActiModal(calendarActId) {
         type: "GET",
         url: baseUrl + "/get-calendar-act/act-id=" + calendarActId,
         success: function (data) {
+            console.log(data);
             // Helper function to extract image URL
             function extractImageUrl(imageData) {
                 if (!imageData) return null;
@@ -418,7 +419,7 @@ $(document).ready(function () {
                     }
 
                     // Refresh calendar or page data
-                    refreshCalendarData();
+                    displayCalendarActivity();
                 } else {
                     toastr.error(response.message || "Failed to upload image");
                 }
@@ -474,7 +475,6 @@ function deleteCalendarImage() {
                 toastr.success(
                     response.message || "Image deleted successfully!",
                 );
-                refreshCalendarData();
             } else {
                 toastr.error(response.message || "Failed to delete image");
             }
@@ -487,24 +487,6 @@ function deleteCalendarImage() {
             deleteBtn.prop("disabled", false);
         },
     });
-}
-
-// Function to refresh calendar data
-function refreshCalendarData() {
-    // If you're using FullCalendar or similar
-    if (typeof calendar !== "undefined" && calendar.refetchEvents) {
-        calendar.refetchEvents();
-    }
-
-    // If you have a function to reload activities
-    if (typeof loadCalendarActivities === "function") {
-        loadCalendarActivities();
-    }
-
-    // Optional: Reload the page after a delay
-    // setTimeout(function() {
-    //     location.reload();
-    // }, 1500);
 }
 
 // Image preview functionality
@@ -594,7 +576,7 @@ function openViewCalendarActivityModal(activityId) {
 
             // Update the image
             let imageHtml = `
-                <img src="${imgSrc}" alt="${data.activity}" 
+                <img src="${imgSrc}" alt="${data.activity}"
                      style="width: 100%; height: 100%; object-fit: cover;"
                      onerror="this.onerror=null; this.src='assets/images/galleryIcon.png';">
             `;

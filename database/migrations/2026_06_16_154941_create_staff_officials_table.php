@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("birthPlace");
             $table->string("civilStatus");
             $table->string("position");
+            $table->string("designation");
             $table->string("status");
             $table->string("code");
             $table->timestamps();

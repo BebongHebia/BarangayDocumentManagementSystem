@@ -57,8 +57,12 @@
                         </div>
                     </div>
 
-
-
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label>Committee Designated</label>
+                            <input type="text" name="designation" class="form-control">
+                        </div>
+                    </div>
 
                 </form>
             </div>

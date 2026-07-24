@@ -18,6 +18,7 @@ class StaffOfficialController extends Controller
                     'birthPlace' => $request->birthPlace,
                     'civilStatus' => $request->civilStatus,
                     'position' => $request->position,
+                    'designation' => $request->designation,
                     'status' => "Active",
                     'code' => date("Ymdhis"),
                 ]);
@@ -39,6 +40,7 @@ class StaffOfficialController extends Controller
                     'birthPlace' => $request->birthPlace,
                     'civilStatus' => $request->civilStatus,
                     'position' => $request->position,
+                    'designation' => $request->designation,
                     'status' => "Active",
                     'code' => date("Ymdhis"),
                 ]);
@@ -60,6 +62,7 @@ class StaffOfficialController extends Controller
                     'birthPlace' => $request->birthPlace,
                     'civilStatus' => $request->civilStatus,
                     'position' => $request->position,
+                    'designation' => $request->designation,
                     'status' => "Active",
                     'code' => date("Ymdhis"),
                 ]);
@@ -81,6 +84,7 @@ class StaffOfficialController extends Controller
                     'birthPlace' => $request->birthPlace,
                     'civilStatus' => $request->civilStatus,
                     'position' => $request->position,
+                    'designation' => $request->designation,
                     'status' => "Active",
                     'code' => date("Ymdhis"),
                 ]);

@@ -33,7 +33,7 @@ Route::get('/login', function () {
 });
 
 Route::get('/', function(){
-    return redirect('/login');
+    return redirect('/bdms-home');
 });
 
 Route::get('/profile', function(){

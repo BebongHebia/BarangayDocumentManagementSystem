@@ -278,8 +278,7 @@
             // You can adjust the status filter as needed
             $upcomingActivities = \App\Models\CalendarActivity::whereIn('status', ['Ongoing', 'Upcoming'])
             ->orWhere('dateStart', '>=', now())
-            ->orderBy('dateStart', 'asc')
-            ->limit(6) // Limit to 6 activities
+            ->orderBy('dateStart', 'asc')// Limit to 6 activities
             ->get();
             @endphp
 
@@ -288,7 +287,7 @@
                 <div class="activity-item">
                     @php
                     // Get the first image for this activity
-                    $activityImage = $activity->getCalActImage->first();
+                    $activityImage = $activity->getCalActImage;
                     @endphp
 
                     @if($activityImage && $activityImage->path)

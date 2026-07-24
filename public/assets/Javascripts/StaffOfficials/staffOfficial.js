@@ -82,20 +82,24 @@ function displayStaffOfficial() {
                                      alt="${staffOfficial.completeName}">
                             </div>
                             <div id="soBody">
-                                <h4 class="text-start">${staffOfficial.completeName} - ${staffOfficial.position}</h4>
+                                <h4 class="text-start">${staffOfficial.completeName} - <b>${staffOfficial.position}</b></h4>
                                 <hr>
-                                <p class="text-start">Sex : ${staffOfficial.sex}</p>
-                                <p class="text-start">Birthday : ${staffOfficial.bday}</p>
-                                <p class="text-start">Birthplace : ${staffOfficial.birthPlace}</p>
-                                <p class="text-start">Civil Status : ${staffOfficial.civilStatus}</p>
-                                <p class="text-start">Status : ${staffOfficial.status}</p>
+                                <p class="text-start">
+
+                                    <b>Sex :</b> ${staffOfficial.sex} <br>
+                                    <b>Birthday :</b> ${staffOfficial.bday} <br>
+                                    <b>Birthplace :</b> ${staffOfficial.birthPlace} <br>
+                                    <b>Civil Status :</b> ${staffOfficial.civilStatus} <br>
+                                    <b>Status :</b> ${staffOfficial.status} <br>
+                                    <b>Designated : </b> ${staffOfficial.designation} <br>
+                                </p>
                                 <div class="d-flex justify-content-around">
                                     <button class="btn btn-warning btn-sm" onclick="openChangeImageModal('${staffOfficial.code}')">
                                         <i class="fas fa-image"></i> Change Image
                                     </button>
                                     ${statusButton}
                                     <button class="btn btn-danger" onclick="openRemoveStaffOfficialModal('${staffOfficial.code}')">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fas fa-trash"></i> Delete
                                     </button>
                                 </div>
                             </div>

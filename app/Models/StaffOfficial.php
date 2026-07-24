@@ -13,6 +13,7 @@ class StaffOfficial extends Model
         'birthPlace',
         'civilStatus',
         'position',
+        'designation',
         'status',
         'code',
         'profile_photo', // Add this field

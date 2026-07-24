@@ -18,5 +18,5 @@ class CalendarActivity extends Model
     public function getCalActImage(){
         return $this->belongsTo(ActImage::class, 'code', 'code');
     }
-    
+
 }

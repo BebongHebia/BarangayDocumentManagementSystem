@@ -37,18 +37,18 @@ class ActImageController extends Controller
 
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                
+
                 // Generate a unique filename
                 $fileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file->getClientOriginalName());
-                
+
                 // Store the file
                 $path = $file->storeAs('calendar_activity_images', $fileName, 'public');
-                
+
                 // Check if file was stored successfully
                 if (!$path) {
                     throw new \Exception('Failed to store file');
                 }
-                
+
                 // Generate full URL
                 $fullPath = asset('storage/' . $path);
 
@@ -61,24 +61,23 @@ class ActImageController extends Controller
                             Storage::disk('public')->delete($oldPath);
                         }
                     }
-                    
+
                     // Update existing image
                     $existingImage->update([
                         'fileName' => $fileName,
                         'path' => $fullPath,
                     ]);
-                    
+
                     $imageData = $existingImage;
                     $message = 'Image updated successfully';
                 } else {
                     // Create new image record
                     $imageData = ActImage::create([
-                        'code' => 'ACT_IMG_' . uniqid(),
                         'fileName' => $fileName,
                         'path' => $fullPath,
-                        'code' => $activityId,
+                        'code' => $activity->code,
                     ]);
-                    
+
                     $message = 'Image uploaded successfully';
                 }
 
@@ -106,7 +105,7 @@ class ActImageController extends Controller
             Log::error('Image upload error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error uploading image: ' . $e->getMessage()
@@ -118,7 +117,7 @@ class ActImageController extends Controller
     {
         try {
             $image = ActImage::where('code', $activityId)->first();
-            
+
             if (!$image) {
                 return response()->json([
                     'success' => false,
@@ -145,7 +144,7 @@ class ActImageController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Image delete error: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting image: ' . $e->getMessage()
