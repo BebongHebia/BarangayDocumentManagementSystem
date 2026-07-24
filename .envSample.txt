@@ -1,0 +1,4 @@
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:iNeRaDobmjUFZ7+Hw42oup2pZTp3Cylq0kJHomm/aqw=
+APP_DEBUG=false
