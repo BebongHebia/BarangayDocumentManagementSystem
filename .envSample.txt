@@ -1,8 +1,8 @@
-APP_NAME=Laravel
-APP_ENV=local
+APP_NAME=BarangayDocumentManagementSystem
+APP_ENV=production
 APP_KEY=base64:iNeRaDobmjUFZ7+Hw42oup2pZTp3Cylq0kJHomm/aqw=
-APP_DEBUG=falase
-APP_URL=http://localhost:8000
+APP_DEBUG=false
+APP_URL=https://barangaydocumentmanagementsystem.onrender.com
 
 APP_LOCALE=en
 APP_FALLBACK_LOCALE=en
@@ -20,8 +20,8 @@ LOG_STACK=single
 LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=debug
 
-DB_CONNECTION=mysql
-DB_HOST=dpg-d9hpdmj7uimc73dr7jog-a
+DB_CONNECTION=pgsql
+DB_HOST=dpg-d9hpdmj7uimc73dr7jog-a.oregon-postgres.render.com
 DB_PORT=5432
 DB_DATABASE=bdms_65vq
 DB_USERNAME=bdms_65vq_user

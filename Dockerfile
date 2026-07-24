@@ -6,17 +6,20 @@ WORKDIR /var/www/html
 
 USER root
 
-# Install Node.js and npm for asset building
+# Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs
 
-# Install composer dependencies
+# Install dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Install npm dependencies and build assets
+# Build assets
 RUN npm install && npm run build
 
-# Setup Laravel
+# ⚠️ ADD THIS: Run migrations before caching
+RUN php artisan migrate --force
+
+# Cache config, routes, and views
 RUN php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache
