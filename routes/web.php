@@ -419,15 +419,16 @@ Route::post('/search-masterlists', function(Request $request){
         return response()->json($masterLists);
 });
 Route::get('/register/list-code={listCode}', function($listCode){
-
     $data = User::where('listCode', $listCode)->count();
     if ($data > 0){
-        return redirect('/');
+        return redirect('/')->with('error', 'This code is already registered');
     } else {
-        $masterListData = MasterList::where('listCode', $listCode)->get()->first();
+        $masterListData = MasterList::where('listCode', $listCode)->first();
+        if (!$masterListData) {
+            return redirect('/')->with('error', 'Invalid registration code');
+        }
         return view('Auth.Register', ['listCode' => $listCode, 'masterListData' => $masterListData]);
     }
-
 })->name('register.check');
 
 Route::get('/get-master-list-details/list-code={listCode}', function($listCode){
