@@ -723,3 +723,12 @@ Route::get('/get-complain-incident-report/complaintIncident-id={complaintID}', f
 Route::get('/bdms-home', function(){
     return view('Landing.index');
 });
+
+Route::get('/session-test', function() {
+    session(['test' => 'working']);
+    return response()->json([
+        'session_id' => session()->getId(),
+        'test_value' => session('test'),
+        'driver' => config('session.driver')
+    ]);
+});
