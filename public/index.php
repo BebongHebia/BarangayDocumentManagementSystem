@@ -34,6 +34,7 @@ try {
     $kernel->terminate($request, $response);
 
 
+
 } catch (\Exception $e) {
     error_log("=== ERROR Test: " . $e->getMessage());
     error_log("=== FILE Test : " . $e->getFile() . ":" . $e->getLine());
