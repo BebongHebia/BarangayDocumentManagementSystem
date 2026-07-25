@@ -33,6 +33,17 @@ try {
     $response->send();
     $kernel->terminate($request, $response);
 
+    // Force HTTPS
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+        $_SERVER['HTTPS'] = 'on';
+    }
+
+    // Or simply force it
+    if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off') {
+        header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
 } catch (\Exception $e) {
     error_log("=== ERROR Test: " . $e->getMessage());
     error_log("=== FILE Test : " . $e->getFile() . ":" . $e->getLine());
