@@ -284,7 +284,7 @@
 
             <div class="activity-list">
                 @forelse($upcomingActivities as $activity)
-                <div class="activity-item">
+                <div class="activity-item" style="margin-top: 10px; border:1px solid rgb(190, 190, 190)">
                     @php
                     // Get the first image for this activity
                     $activityImage = $activity->getCalActImage;
@@ -335,7 +335,7 @@
 
             <div class="announce-list">
                 @forelse($announcements as $announcement)
-                <div class="announce-item">
+                <div class="announce-item" style="margin-top: 10px; border:1px solid rgb(190, 190, 190)">
                     @if($announcement->image && $announcement->image->path)
                     <img src="{{ asset('storage/' . $announcement->image->path) }}" alt="{{ $announcement->title }}" class="announce-img">
                     @else

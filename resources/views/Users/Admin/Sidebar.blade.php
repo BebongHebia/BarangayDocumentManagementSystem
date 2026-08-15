@@ -103,7 +103,7 @@
                 </li>
 
 
-                <li class="nav-item">s
+                <li class="nav-item">
                     <a href="{{ url('/masterlists') }}" class="nav-link">
                         <i class="nav-icon fas fa-table"></i>
                         <p>

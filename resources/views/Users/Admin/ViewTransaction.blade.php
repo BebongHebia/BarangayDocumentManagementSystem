@@ -1,8 +1,9 @@
 @extends('Users.Admin.Sidebar')
 @section('sidebar')
+@include('Components.ViewTransaction.SetProcessingModal')
+@include('Components.ViewTransaction.SetRejectModal')
+@include('Components.ViewTransaction.SetApproveModal')
 <input type="hidden" id="transactionCode" value="{{ $transaction->code }}">
-@include('Components.Transactions.Admin.SetApproveModal')
-@include('Components.Transactions.Admin.SetRejectModal')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -31,106 +32,145 @@
                         <div class="card-body">
 
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <form id="actionTransactionForm">
-                                        @csrf
-                                        <input type="hidden" name="transactionId" id="transactionId">
-                                        <input type="hidden" name="userCode" id="userCode">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <label>Complete Name</label>
-                                                <input type="text" name="completeName" id="completeName" class="form-control" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <label>Birthdate</label>
-                                                <input type="date" name="bday" id="bday" class="form-control" readonly>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label>Sex</label>
-                                                <select class="form-select select2" name="sex" id="sex" style="width:100%" disabled>
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <label>Civil Status</label>
-                                                <select class="form-select select2" name="civilStatus" id="civilStatus" style="width:100%" disabled>
-                                                    <option value="Single">Single</option>
-                                                    <option value="Married">Married</option>
-                                                    <option value="Widowed">Widowed</option>
-                                                    <option value="Separated">Separated</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3">
-                                                <label>Place of birth</label>
-                                                <input type="text" name="placeOfBirth" id="placeOfBirth" class="form-control" readonly>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <label>Citizenship</label>
-                                                <input type="text" name="citizenship" id="citizenship" class="form-control" readonly>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <label>Profession</label>
-                                                <input type="text" name="profession" id="profession" class="form-control" readonly>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <label>Phone</label>
-                                                <input type="text" name="phone" id="phone" class="form-control" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-2">
-                                                <label>Purok</label>
-                                                <input type="text" name="purok" id="purok" class="form-control" readonly>
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <label>Current Address</label>
-                                                <input type="text" name="currentAddress" id="currentAddress" class="form-control" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <label>Remarks</label>
-                                                <textarea class="form-control" name="remarks" id="remarks" rows="5"></textarea>
-                                            </div>
-                                        </div>
-                                    </form>
+                                <div class="col-sm-6 d-flex justify-content-center">
 
-                                    <div class="row mt-2">
-                                        <div class="col-sm-4">
-                                            <button class="btn btn-success btn-block" onclick="setProcessing(event)">
-                                                <i class="fas fa-gavel"></i> Set Processing
-                                            </button>
-                                        </div>
+                                    <button class="btn btn-primary m-2" onclick="openTransactionModal({{ $transaction->code }})">
+                                        <i class="fas fa-gavel"></i> Set Processing
+                                    </button>
 
-                                        <div class="col-sm-4">
-                                            <button class="btn btn-primary btn-block" onclick="openApproveTransactionModal({{ $transaction->code }})">
-                                                <i class="fas fa-gavel"></i> Set Approved
-                                            </button>
-                                        </div>
+                                    <button class="btn btn-success m-2" data-toggle="modal" data-target="#SetApproveModal">
+                                        <i class="fas fa-check"></i> Set Approved
+                                    </button>
 
-                                        <div class="col-sm-4">
-                                            <button class="btn btn-danger btn-block" onclick="openRejectTransactionModal({{ $transaction->code }})">
-                                                <i class="fas fa-gavel"></i> Set Rejected
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    @if($transaction->type == "Certificate of Indigency")
-                                    <img src="{{ asset('assets/images/CertificateOfIndigency.jpeg') }}" class="img-fluid">
-                                    @elseif ($transaction->type == "Barangay Clearance")
-                                    <img src="{{ asset('assets/images/BarangayClearance.jpeg') }}" class="img-fluid">
-                                    @elseif ($transaction->type == "Barangay Certification")
-                                    <img src="{{ asset('assets/images/BarangayCertification.jpeg') }}" class="img-fluid">
-                                    @endif
+                                    <button class="btn btn-danger m-2" data-toggle="modal" data-target="#SetRejectModal">
+                                        <i class="fas fa-window-close"></i> Set Rejected
+                                    </button>
+
                                 </div>
                             </div>
 
+
+                            @if($transaction->type == "Attestation")
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="text-center"><b>CERTIFICATION OF ATTESTATION</b></h3>
+                                    <p class="text-justify">This is to certify that Mr. /Ms. <b><span>{{ $transaction->user->completeName }}</span></b>, <b><span>{{ $transaction->attestation_details->age }}</span></b> YEARS OLD residing at <b>BARANGAY 8, MALAYBALAY CITY, BUKIDNON,</b> is currently <b><span> {{ $transaction->attestation_details->status }}</span></b> earning Php <b><span>{{ $transaction->attestation_details->income }}</span></b> per month.</p>
+                                    <p class="text-justify">Following a thorough assessment and validation of the client’s socio-economic profile conducted by the Barangay Captain/Barangay Kagawad, it has been determined that Mr. /Ms <b><span>{{ $transaction->user->completeName }}</span></b>, is an individual receiving income below the regional minimum wage and is facing significant financial challenges because of the effects of inflation, like the rising prices of goods and services. The above-mentioned income remains insufficient to meet the unforeseen expenses for <b><span>{{ $transaction->attestation_details->typeOfAssistance }}</span> ASSISTANCE</b> on top of the family’s monthly household expenses amounting to Php <b><span>{{ $transaction->attestation_details->totalMonthlyHousholdExpense }}</span></b>, thus further straining their limited financial resources.</p>
+                                    <p class="text-justify">This certification is issued upon the request of the above-named person for whatever legal purposes it may serve</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <center>
+                                        <img src="{{ asset('assets/images/DocImage/ATTESTATION-2026.jpg') }}" class="img-fluid">
+                                    </center>
+
+                                </div>
+                            </div>
+
+                            @elseif ($transaction->type == "Barangay Certification - Regular")
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="text-center"><b>BARANGAY CERTIFICATION - REGULAR</b></h3>
+                                    <h5 class="text-justify"><b>TO WHOME IT MAY CONCERN :</b> </h5>
+                                    <p class="text-justify">This is to certify that <b><span>{{ $transaction->user->completeName }}</span></b>, of legal age, Filipino, and a resident of <b><span>{{ $transaction->bar_cert_reg_details->sector }}</span></b>, <b>BARANGAY 8, MALAYBALAY CITY</b>, is a bona fide resident of this barangay. </p>
+                                    <p class="text-justify">This is to certify further that she is a resident of the barangay for <b><span>{{ $transaction->bar_cert_reg_details->residentYears }}</span></b> years.</p>
+                                    <p class="text-justify">This certification is issued upon the request of the above-named person for <b><span>{{ $transaction->bar_cert_reg_details->purpose }}</span></b> purposes.</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <center>
+                                        <img src="{{ asset('assets/images/DocImage/BARANGAY-CERTIFICATION-2026.jpg') }}" class="img-fluid">
+                                    </center>
+
+                                </div>
+                            </div>
+
+                            @elseif ($transaction->type == "Barangay Certification - First Time Job Seeker")
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="text-center"><b>BARANGAY CERTIFICATION - FIRST TIME JOB SEEKER</b></h3>
+                                    <h5 class="text-justify"><b>TO WHOME IT MAY CONCERN :</b> </h5>
+                                    <p class="text-justify">This is to certify that <b><span>{{ $transaction->user->completeName }}</span></b>, of legal age, Filipino, is a bona fide resident of <b><span>{{ $transaction->bar_cert_reg_details->sector }}</span></b> BARANGAY 8, MALAYBALAY CITY, a qualified to avail <b>RA 11261 or the FIRST TIME JOB SEEKERS ACT OF 2019.</b></p>
+                                    <p class="text-justify">I further certify that the holder/bearer was informed of his/her rights, including the duties and responsibilities accorded by RA 11261 through the Oath of Undertaking he/she has signed and executed in the presence of the Barangay Official.</p>
+                                    <p class="text-justify">This Barangay Certification is issued as per request of the bearer for <b><span>{{ $transaction->bar_cert_reg_details->purpose }}</span></b> purposes.</p>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <center>
+                                        <img src="{{ asset('assets/images/DocImage/BARANGAY-CERTIFICATION-2026-FIRST-TIME-JOB-SEEKER.jpg') }}" class="img-fluid">
+                                    </center>
+
+                                </div>
+                            </div>
+
+                            @elseif ($transaction->type == "Barangay Clearance")
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="text-center"><b>BARANGAY CLEARANCE</b></h3>
+                                    <h5 class="text-justify"><b>TO WHOME IT MAY CONCERN :</b> </h5>
+                                    <p class="text-justify">THIS IS TO CERTIFY that <b><span>{{ $transaction->user->completeName }}</span></b> is a bona fide resident of <b><span>{{ $transaction->bar_clear_details->sector }}</span></b> Barangay 08, Malaybalay City.</p>
+                                    <p class="text-justify">He /She is known to be of <b>GOOD MORAL CHARACTER and a LAW ABIDING citizen</b>, having <b>NO DEREGATORY records</b> of complaint, civil or criminal, filed against him/her and pending in the Barangay 08 office</p>
+                                    <p class="text-justify">This Barangay Certification is issued as per request of the bearer for <b><span>{{ $transaction->bar_clear_details->purpose }}</span></b>.</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <center>
+                                        <img src="{{ asset('assets/images/DocImage/BARANGAY-CLEARANCE-2026.jpg') }}" class="img-fluid">
+                                    </center>
+                                </div>
+                            </div>
+
+                            @elseif ($transaction->type == "Barangay Identification")
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="text-center"><b>BARANGAY IDENTIFICATION</b></h3>
+                                    <p class="text-start"><b>TO WHOM IT MAY CONCERN: </b></p>
+                                    <p class="text-justify">THIS IS TO CERTIFY that <b><span>{{ $transaction->user->completeName }}</span></b> is a bona fide resident at <b><span>{{ $transaction->bar_iden_details->sector }}</span></b> Barangay 08, Malaybalay City.</p>
+                                    <p class="text-justify"><b>THIS IS TO CERTIFY FURTHER</b> that she/he is found to be indigent after the assessment made by the office regarding their annual income.</p>
+                                    <p class="text-justify">This certification is issued upon the request of the above-named person for <b>IDENTIFICATION purposes.</b></p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <center>
+                                        <img src="{{ asset('assets/images/DocImage/BARANGAY-IDENTIFICATION-2026.jpg') }}" class="img-fluid">
+                                    </center>
+
+                                </div>
+                            </div>
+                            @elseif ($transaction->type == "Barangay Indigency - Regular")
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="text-center"><b>BARANGAY INDIGENCY - REGULAR</b></h3>
+                                    <h5 class="text-justify"><b>TO WHOME IT MAY CONCERN :</b> </h5>
+                                    <p class="text-justify">This is to certify that <b><span>{{ $transaction->user->completeName }}</span></b>, a bona fide resident of <b><span>{{ $transaction->bar_indigent_details->sector }}</span></b> Barangay 8, Malaybalay City. </p>
+                                    <p class="text-justify">That the subject is <b>categorized as an indigent</b> member of the community and having a monthly income that is insufficient to meet the basic needs of their family.</p>
+                                    <p class="text-justify">This certification is issued upon the request of <b><span>{{ $transaction->user->completeName }}</span></b>.</p>
+                                    <p class="text-justify">THIS DOCUMENT SHALL SERVE AS A SUPPORTING REQUIREMENT FOR <b><span>{{ $transaction->bar_indigent_details->purpose }}</span> purposes</b> .</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <center>
+                                        <img src="{{ asset('assets/images/DocImage/BARANGAY-INDIGENCY-2026-NEW-Copy.jpg') }}" class="img-fluid">
+                                    </center>
+
+                                </div>
+                            </div>
+                            @elseif ($transaction->type == "Barangay Indigency - Patient Name")
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3 class="text-center"><b>BARANGAY INDIGENCY - PATIENT NAME</b></h3>
+                                    <h5 class="text-justify"><b>TO WHOME IT MAY CONCERN :</b> </h5>
+                                    <p class="text-justify">This is to certify that <b><span>{{ $transaction->user->completeName }}</span></b>, a bona fide resident of <b><span>{{ $transaction->bar_indigent_details->sector }}</span></b> Barangay 8, Malaybalay City. </b></p>
+                                    <p class="text-justify">That the subject is categorized as an indigent member of the community and she/he is the <b><span>{{ $transaction->bar_indigent_details->relation }}</span></b> of <b><span>{{ $transaction->bar_indigent_details->authorized }}</span></b> (patient) having a monthly income that is insufficient to meet the basic needs of their family.</p>
+                                    <p class="text-justify">This certification is issued upon the request of <b><span>{{ $transaction->user->completeName }}</span></b>.</p>
+                                    <p class="text-justify">THIS DOCUMENT SHALL SERVE AS A SUPPORTING REQUIREMENT FOR <b><span>{{ $transaction->bar_indigent_details->purpose }}</span></b> purposes.</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <center>
+                                        <img src="{{ asset('assets/images/DocImage/BARANGAY-INDIGENCY-2026-WITH-PATIENT-NAME.jpg') }}" class="img-fluid">
+                                    </center>
+
+                                </div>
+                            </div>
+                            @else
+
+                            @endif
 
 
                         </div>

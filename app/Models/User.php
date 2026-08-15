@@ -51,4 +51,8 @@ class User extends Authenticatable
     public function masterList(){
         return $this->belongsTo(MasterList::class, 'listCode', 'listCode');
     }
+
+    public function profile_pic(){
+        return $this->hasOne(ProfilePic::class, 'userCode', 'userCode');
+    }
 }

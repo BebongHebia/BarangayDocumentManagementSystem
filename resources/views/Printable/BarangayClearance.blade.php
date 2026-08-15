@@ -172,6 +172,19 @@
                     <h5 class="text-start" style="position: relative; top: 515px; left: 150px" id="displayCedula">{{ $transaction->payment->orIssOn }}</h5>
                     <p class="text-start" style="position: relative; top: 507px; left: 150px" id="displayCedula">{{ $transaction->payment->orIssAt }}</p>
                     <p class="text-start" style="position: relative; top: 490px; left: 150px" id="displayCedula">{{ $transaction->payment->orAmount }}</p>
+                    <p class="text-justify" style="position: relative; bottom:20px; left: 310px; width:60%; font-size: 11pt;">
+                        <b>TO WHOM IT MAY CONCERN:</b><br><br>
+                        THIS IS TO CERTIFY that <b>{{ $transaction->user->completeName }}</b> is a bona fide resident of <b>{{ $transaction->bar_clear_details->sector }}</b> Barangay 08, Malaybalay City.
+                        <br><br>
+                        He /She is known to be of <b>GOOD MORAL CHARACTER</b> and a <b>LAW ABIDING</b> citizen, having <b>NO DEREGATORY</b> records of complaint, civil or criminal, filed against him/her and pending in the Barangay 08 office. 
+
+                        <br><br>
+                        This Barangay Certification is issued as per request of the bearer for {{ $transaction->bar_clear_details->purpose }} purposes.
+                        
+                        <br><br>Issued this <span><b>{{ $transaction->payment->created_at->format('d') }}</b></span> day of <span><b>{{ $transaction->payment->created_at->format('M') }} {{ $transaction->payment->created_at->format('Y') }}</b></span> at the Office of the Punong Barangay, Bontao St, Barangay 8, Malaybalay City.
+                        <br><br>
+                        By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
+                    </p>
                 </div>
             </div>
         </div>

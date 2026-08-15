@@ -1,8 +1,24 @@
 @extends('Users.User.Sidebar')
 @section('sidebar')
-@include('Components.Transactions.User.ViewTransactionModal')
-@include('Components.Transactions.User.EditTransactionModal')
-@include('Components.Transactions.User.DeleteTransactionModal')
+
+@include('Components.Transactions.Documents.Attestations.EditAttestationModal')
+@include('Components.Transactions.Documents.Attestations.DeleteAttestationModal')
+@include('Components.Transactions.Documents.BarCertReg.EditBarCertRegModal')
+@include('Components.Transactions.Documents.BarCertReg.DeleteBarCertRegModal')
+@include('Components.Transactions.Documents.BarClear.EditBarClearModal')
+@include('Components.Transactions.Documents.BarClear.DeleteBarClearModal')
+@include('Components.Transactions.Documents.BarClear.ViewBarClearModal')
+@include('Components.Transactions.Documents.BarangayIden.DeleteBarIdenModal')
+@include('Components.Transactions.Documents.BarangayIden.EditBarIdenModal')
+@include('Components.Transactions.Documents.BarIndigent.EditBarIndigentModal')
+@include('Components.Transactions.Documents.BarIndigent.DeleteBarIndigentModal')
+
+
+@include('Components.Transactions.Documents.Attestations.ViewAttestationModal')
+@include('Components.Transactions.Documents.BarangayIden.ViewBarIdenModal')
+@include('Components.Transactions.Documents.BarCertReg.ViewBarCertModal')
+@include('Components.Transactions.Documents.BarIndigent.ViewBarIndigentModal')
+
 <input type="hidden" id="mainUserCode" value="{{ auth()->user()->userCode }}">
 
 <!-- Content Wrapper. Contains page content -->

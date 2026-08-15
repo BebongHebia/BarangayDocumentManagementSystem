@@ -18,11 +18,10 @@ return new class extends Migration
             $table->string('dateCreated');
             $table->string('status');
             $table->string('code');
-            $table->string('purposeType');
-            $table->string('purpose');
             $table->string('validity');
             $table->string('remarks');
             $table->string('dateSched');
+            $table->string('issueDate');
             $table->timestamps();
         });
     }

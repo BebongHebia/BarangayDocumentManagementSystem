@@ -4,7 +4,6 @@
         <th>Code</th>
         <th>Name</th>
         <th>Type</th>
-        <th>Purpose</th>
         <th>Date Req.</th>
         <th>Remarks</th>
         <th>Status</th>

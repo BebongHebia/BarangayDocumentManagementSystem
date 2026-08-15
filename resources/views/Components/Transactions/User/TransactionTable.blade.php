@@ -3,7 +3,6 @@
         <th>No.#</th>
         <th>Code</th>
         <th>Type</th>
-        <th>Purpose</th>
         <th>Date Request</th>
         <th>Status</th>
         <th>Action</th>

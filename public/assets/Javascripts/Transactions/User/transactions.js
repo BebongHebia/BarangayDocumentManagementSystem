@@ -59,7 +59,6 @@ function displayTransaction() {
                         <td>${counter}</td>
                         <td>${transactions.code}</td>
                         <td>${transactions.type}</td>
-                        <td>${transactions.purpose}</td>
                         <td>${transactions.dateCreated}</td>
                         <td>${statusDisplay}</td>
                         <td>${actionButtons}</td>
@@ -78,29 +77,37 @@ function displayTransaction() {
     });
 }
 
-function docImage(docType) {
-    var img1 = $("#img1").css("display", "none");
-    var img2 = $("#img2").css("display", "none");
-    var img3 = $("#img3").css("display", "none");
-
-    if (docType == "Barangay Clearance") {
-        img3.css("display", "block");
-    } else if (docType == "Certificate of Indigency") {
-        img1.css("display", "block");
-    } else if (docType == "Barangay Certification") {
-        img2.css("display", "block");
-    }
-}
-
 function openDeleteTransactionModal(transactionId) {
     $.ajax({
         type: "get",
         url: baseUrl + "/get-transactions/transaction-code=" + transactionId,
         success: function (data) {
-            $("#deleteTransactionId").val(data.id);
+            if (data.type == "Attestation") {
+                $("#deleteTransAttestationId").val(data.attestation_details.id);
+                $("#DeleteAttestationModal").modal("show");
+            } else if (
+                data.type == "Barangay Certification - Regular" ||
+                data.type == "Barangay Certification - First Time Job Seeker"
+            ) {
+                $("#deleteBarCertRegTransactionId").val(
+                    data.bar_cert_reg_details.id,
+                );
+                $("#DeleteBarCertRegModal").modal("show");
+            } else if (data.type == "Barangay Clearance") {
+                $("#deleteBarClearId").val(data.bar_clear_details.id);
+                $("#DeleteBarClearModal").modal("show");
+            } else if (data.type == "Barangay Identification") {
+                $("#deleteBarIdenId").val(data.bar_iden_details.id);
+                $("#DeleteBarangayIdenModal").modal("show");
+            } else if (
+                data.type == "Barangay Indigency - Regular" ||
+                data.type == "Barangay Indigency - Patient Name"
+            ) {
+                $("#deleteBarIndigentId").val(data.bar_indigent_details.id);
+                $("#DeleteBarIndigentModal").modal("show");
+            }
         },
     });
-    $("#DeleteTransactionModal").modal("show");
 }
 
 function openEditTransactionModal(transactionId) {
@@ -108,16 +115,280 @@ function openEditTransactionModal(transactionId) {
         type: "get",
         url: baseUrl + "/get-transactions/transaction-code=" + transactionId,
         success: function (data) {
-            $("#editTransactionId").val(data.id);
-            $("#editType").val(data.type).trigger("change");
-            $("#editPurposeType").val(data.purposeType).trigger("change");
-            loadPurposes(data.purposeType);
-            $("#editPurpose").val(data.purpose).trigger("change");
+            if (data.type == "Attestation") {
+                $("#editTransAttestationId").val(data.attestation_details.id);
+                $("#editAttestationName").val(data.user.completeName);
+                $("#editAttestationAge").val(data.attestation_details.age);
+                $("#editAttestationStatus")
+                    .val(data.attestation_details.status)
+                    .trigger("change");
+                $("#editAttestationMonthlyIncome")
+                    .val(data.attestation_details.income)
+                    .trigger("change");
+                $("#editAttestationAssistanceType")
+                    .val(data.attestation_details.typeOfAssistance)
+                    .trigger("change");
+                $("#editAttestationTotalMonthlyHousholdExpense").val(
+                    data.attestation_details.totalMonthlyHousholdExpense,
+                );
+
+                $("#EditAttestationModal").modal("show");
+            } else if (
+                data.type == "Barangay Certification - Regular" ||
+                data.type == "Barangay Certification - First Time Job Seeker"
+            ) {
+                $("#editBarCertRegTransactionId").val(
+                    data.bar_cert_reg_details.id,
+                );
+                $("#editBarCertRegSector")
+                    .val(data.bar_cert_reg_details.sector)
+                    .trigger("change");
+
+                $("#editBarCertRegResidentYears")
+                    .val(data.bar_cert_reg_details.residentYears)
+                    .trigger("change");
+
+                $("#editBarCertRegisFirstTimeJobSeeker").val(
+                    data.bar_cert_reg_details.isFirstTimeJobSeeker,
+                );
+
+                $("#editBarCertRegPurType")
+                    .val(data.bar_cert_reg_details.purposeType)
+                    .trigger("change");
+
+                loadPurposeBarCertReg(data.bar_cert_reg_details.purposeType);
+                $("#editBarCertRegPur")
+                    .val(data.bar_cert_reg_details.purpose)
+                    .trigger("change");
+                $("#EditBarCertRegModal").modal("show");
+            } else if (data.type == "Barangay Clearance") {
+                $("#editBarClearId").val(data.bar_clear_details.id);
+                $("#editBarClearSector").val(data.bar_clear_details.sector);
+                $("#editBarClerPurType")
+                    .val(data.bar_clear_details.purposeType)
+                    .trigger("change");
+                loadPurposeBarClear(data.bar_clear_details.purposeType);
+                $("#editBarClearPur")
+                    .val(data.bar_clear_details.purpose)
+                    .trigger("change");
+
+                $("#EditBarClearModal").modal("show");
+            } else if (data.type == "Barangay Identification") {
+                $("#editName").val(data.user.completeName);
+                $("#editSector").val(data.user.purok);
+                $("#EditBarIdenModal").modal("show");
+            } else if (
+                data.type == "Barangay Indigency - Regular" ||
+                data.type == "Barangay Indigency - Patient Name"
+            ) {
+                $("#editBarIndigentId").val(data.bar_indigent_details.id);
+                $("#editBarIndigentName").val(data.user.completeName);
+                $("#editBarIndigentSector").val(data.user.purok);
+                $("#editBarIndigentIsAuthorized").val(
+                    data.bar_indigent_details.isAuthorized,
+                );
+                $("#editBarIndigentType").val(data.type);
+                $("#editBarIndigentAuthorized").val(
+                    data.bar_indigent_details.authorized,
+                );
+                $("#editBarIndigentRelation").val(
+                    data.bar_indigent_details.relation,
+                );
+
+                $("#editBarIndigentPurType")
+                    .val(data.bar_indigent_details.purposeType)
+                    .trigger("change");
+
+                loadBarIndigentPurposes(data.bar_indigent_details.purposeType);
+                $("#editBarIndiPur")
+                    .val(data.bar_indigent_details.purpose)
+                    .trigger("change");
+                $("#EditBarIndigentModal").modal("show");
+            }
         },
     });
-    $("#EditTransactionModal").modal("show");
 }
 
+function deleteBarIndigent(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/delete-barangay-indigent",
+        data: $("#deleteBarIndigentForm").serialize(),
+        success: function (data) {
+            $("#deleteBarIndigentForm")[0].reset();
+            $("#DeleteBarIndigentModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Request Removed Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function editBarIndigent(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/edit-barangay-indigent",
+        data: $("#editBarIndigentForm").serialize(),
+        success: function (data) {
+            $("#editBarIndigentForm")[0].reset();
+            $("#EditBarIndigentModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Request Edited Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function deleteBarIden(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/delete-barangay-identification",
+        data: $("#deleteBarangayIdenForm").serialize(),
+        success: function (data) {
+            $("#deleteBarangayIdenForm")[0].reset();
+            $("#DeleteBarangayIdenModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Request Removed Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function deleteBarClear(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/delete-barangay-clearance",
+        data: $("#deleteBarClearForm").serialize(),
+        success: function (data) {
+            $("#deleteBarClearForm")[0].reset();
+            $("#DeleteBarClearModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Request Removed Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function editBarClear(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/edit-barangay-clearance",
+        data: $("#editBarClearForm").serialize(),
+        success: function (data) {
+            $("#editBarClearForm")[0].reset();
+            $("#EditBarClearModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Request Edited Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function deleteAttestation(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/delete-attestation",
+        data: $("#deleteAttestationForm").serialize(),
+        success: function (data) {
+            $("#deleteAttestationForm")[0].reset();
+            $("#DeleteAttestationModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Document Deleted Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function editAttestation(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/edit-attestation",
+        data: $("#editAttestationForm").serialize(),
+        success: function (data) {
+            $("#editAttestationForm")[0].reset();
+            $("#EditAttestationModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Document Edited Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function editBarCertReg(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/edit-bar-cert-reg",
+        data: $("#editBarCertRegForm").serialize(),
+        success: function (data) {
+            $("#editBarCertRegForm")[0].reset();
+            $("#EditBarCertRegModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Request Edited Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+
+function deleteBarCertReg(event) {
+    event.preventDefault();
+
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/delete-bar-cert-reg",
+        data: $("#deleteBarCertRegForm").serialize(),
+        success: function (data) {
+            $("#deleteBarCertRegForm")[0].reset();
+            $("#DeleteBarCertRegModal").modal("hide");
+            displayTransaction();
+            swal.fire({
+                title: "Success",
+                text: "Request Removed Successfully",
+                icon: "success",
+            });
+        },
+    });
+}
+/**
 function deleteTransaction(event) {
     event.preventDefault();
 
@@ -158,33 +429,138 @@ function editTransaction(event) {
     });
 }
 
+ */
+
 function openViewTransactionModal(transactionId) {
     $.ajax({
         type: "get",
         url: baseUrl + "/get-transactions/transaction-code=" + transactionId,
         success: function (data) {
-            // Get badge class based on status
-            let badgeClass = getStatusBadgeClass(data.status);
+            if (data.type == "Attestation") {
+                $(".viewAttName").html(data.user.completeName);
+                $("#viewAttAge").html(data.attestation_details.age);
+                $("#viewAttStatus").html(data.attestation_details.status);
+                $("#viewAttIncome").html(data.attestation_details.income);
+                $("#viewAttTypeOfAssistant").html(
+                    data.attestation_details.typeOfAssistance,
+                );
+                $("#viewAttTotalMonthlyHousholdExpense").html(
+                    data.attestation_details.totalMonthlyHousholdExpense,
+                );
+                $("#ViewAttestationModal").modal("show");
+            } else if (data.type == "Barangay Identification") {
+                $("#viewBarIdenName").html(data.user.completeName);
+                $("#viewBarIdenSector").html(data.bar_iden_details.sector);
 
-            var age = calculateAge(data.user.bday);
-            $("#documentCode").html(data.code);
-            $("#docType").html(data.type);
-            $("#docPurpose").html(data.purpose);
-            $("#docCompleteName").html(data.user.completeName);
-            $("#docBday").html(data.user.bday);
-            $("#docCivilStatus").html(data.user.civilStatus);
-            $("#docAge").html(age);
-            $("#docSex").html(data.user.sex);
-            $("#docAddress").html(
-                data.user.purok + ", " + data.user.currentAddress,
-            );
+                $("#ViewBarIdenModal").modal("show");
+            } else if (
+                data.type == "Barangay Certification - Regular" ||
+                data.type == "Barangay Certification - First Time Job Seeker"
+            ) {
+                let barCertDocTypeImg = "";
+                if (data.type == "Barangay Certification - Regular") {
+                    barCertDocTypeImg = `
+                        <img src="/assets/images/DocImage/BARANGAY-CERTIFICATION-2026.jpg" class="img-fluid" alt="Barangay Certification - Regular" />
+                    `;
+                } else if (
+                    data.type ==
+                    "Barangay Certification - First Time Job Seeker"
+                ) {
+                    barCertDocTypeImg = `
+                        <img src="/assets/images/DocImage/BARANGAY-CERTIFICATION-2026-FIRST-TIME-JOB-SEEKER.jpg" class="img-fluid" alt="Barangay Certification - First Time Job Seeker" />
+                    `;
+                }
 
-            // Display status with Bootstrap badge
-            $("#docStatus").html(
-                `<span class="badge ${badgeClass}">${data.status}</span>`,
-            );
+                $("#barCertRegularPanel").css("display", "none");
+                $("#barCertFTJSPanel").css("display", "none");
 
-            docImage(data.type);
+                if (data.type == "Barangay Certification - Regular") {
+                    $("#barCertRegularPanel").css("display", "block");
+                    $("#viewBarCertRegName").html(data.user.name);
+                    $("#viewBarCertRegSector").html(
+                        data.bar_cert_reg_details.sector,
+                    );
+                    $("#viewBarCertRegResidentYears").html(
+                        data.bar_cert_reg_details.residentYears,
+                    );
+
+                    $("#viewBarCertRegPurpose").html(
+                        data.bar_cert_reg_details.purpose,
+                    );
+
+                    $("#barBertImageDocType").html(barCertDocTypeImg);
+                } else if (
+                    data.type ==
+                    "Barangay Certification - First Time Job Seeker"
+                ) {
+                    $("#viewBarCertFTJSName").html(data.user.name);
+                    $("#viewBarCertFTJSSector").html(
+                        data.bar_cert_reg_details.sector,
+                    );
+                    $("#viewBarCertFTJSPurpose").html(
+                        data.bar_cert_reg_details.purpose,
+                    );
+                    $("#barCertFTJSPanel").css("display", "block");
+                }
+
+                $("#ViewBarCertModal").modal("show");
+            } else if (
+                data.type == "Barangay Indigency - Regular" ||
+                data.type == "Barangay Indigency - Patient Name"
+            ) {
+                let barIndigentDocTypeImage = "";
+                if (data.type == "Barangay Indigency - Regular") {
+                    barIndigentDocTypeImage = `
+                        <img src="/assets/images/DocImage/BARANGAY-INDIGENCY-2026-NEW-Copy.jpg" class="img-fluid" alt="Barangay Certification - Regular" />
+                    `;
+                } else if (data.type == "Barangay Indigency - Patient Name") {
+                    barIndigentDocTypeImage = `
+                        <img src="/assets/images/DocImage/BARANGAY-INDIGENCY-2026-WITH-PATIENT-NAME.jpg" class="img-fluid" alt="Barangay Certification - First Time Job Seeker" />
+                    `;
+                }
+                $("#barIndigetnImageDocType").html(barIndigentDocTypeImage);
+
+                $("#viewBarIndigentRegPanel").css("display", "none");
+                $("#viewBarIndigentWPNPanel").css("display", "none");
+
+                if (data.type == "Barangay Indigency - Regular") {
+                    //asdasd
+
+                    $(".viewBarIndigentRegName").html(data.user.completeName);
+                    $("#viewBarIndigentRegPurpose").html(
+                        data.bar_indigent_details.purpose,
+                    );
+                    $("#viewBarIndigentRegSector").html(
+                        data.bar_indigent_details.sector,
+                    );
+
+                    $("#viewBarIndigentRegPanel").css("display", "block");
+                    $("#ViewBarIndigentModal").modal("show");
+                } else if (data.type == "Barangay Indigency - Patient Name") {
+                    //asdasdasd
+                    $(".viewBarIndigentWPNName").html(data.user.completeName);
+                    $("#viewBarIndigentWPNRelation").html(
+                        data.bar_indigent_details.relation,
+                    );
+                    $("#viewBarIndigentWPNAuthorized").html(
+                        data.bar_indigent_details.authorized,
+                    );
+                    $("#viewBarIndigentWPNPurpose").html(
+                        data.bar_indigent_details.purpose,
+                    );
+                    $("#viewBarIndigentWPNSector").html(
+                        data.bar_indigent_details.sector,
+                    );
+                    $("#viewBarIndigentWPNPanel").css("display", "block");
+                    $("#ViewBarIndigentModal").modal("show");
+                }
+            } else if (data.type == "Barangay Clearance") {
+                $("#viewBarClearName").html(data.user.completeName);
+                $("#viewBarClearSector").html(data.bar_clear_details.sector);
+                $("#viewBarClearPurpose").html(data.bar_clear_details.purpose);
+
+                $("#ViewBarClearModal").modal("show");
+            }
         },
         error: function (xhr, status, error) {
             console.error("Error fetching transaction:", error);
@@ -312,65 +688,4 @@ function getStatusConfig(status) {
             icon: "•",
         }
     );
-}
-
-function loadPurposes(purposeType) {
-    // Define the purposes for each category
-    const purposeData = {
-        "Employment & Career": [
-            "Local job applications",
-            "First-time job seekers (under RA 11261 for free government services)",
-            "Overseas employment (OFW requirements)",
-            "Professional regulation commission (PRC) exam or licensing",
-        ],
-        "Business & Financial": [
-            "New business permit application (Barangay Business Clearance)",
-            "Annual business permit renewal",
-            "Microfinance or commercial bank loan applications",
-            "Opening a personal or corporate bank account",
-        ],
-        "Government Assistance & Social Services": [
-            "Medical financial assistance (for DSWD, PCSO, or Malasakit Centers)",
-            "Educational financial assistance, scholarships, or tuition waivers",
-            "Burial or funeral assistance",
-            "Local social welfare and emergency relief programs",
-        ],
-        "Government IDs & Clearances": [
-            "National Police Clearance application",
-            "NBI Clearance application",
-            "Philippine Passport application (DFA)",
-            "Establishing residency for Voter's Registration",
-        ],
-        "Civil, Legal & General Use": [
-            "Proof of residency for utility connections (water, electricity, internet)",
-            "Proof of residency for purchasing a vehicle or property",
-            "Marriage license application",
-            "Local construction or building permit (Certificate of No Objection)",
-            "Certificate of Good Moral Character for school or legal matters",
-        ],
-    };
-
-    // Get the purpose dropdown element
-    const purposeDropdown = document.getElementById("editPurpose");
-
-    // Clear existing options
-    purposeDropdown.innerHTML = "";
-
-    // Add a default disabled option
-    const defaultOption = document.createElement("option");
-    defaultOption.textContent = "Select Purpose";
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    purposeDropdown.appendChild(defaultOption);
-
-    // Get the purposes for the selected type
-    const purposes = purposeData[purposeType] || [];
-
-    // Add new options
-    purposes.forEach(function (purpose) {
-        const option = document.createElement("option");
-        option.value = purpose;
-        option.textContent = purpose;
-        purposeDropdown.appendChild(option);
-    });
 }

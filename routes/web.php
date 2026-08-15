@@ -18,6 +18,7 @@ use App\Models\Cedula;
 use App\Models\CompaintIncidentReport;
 use App\Models\MasterList;
 use App\Models\Payment;
+use App\Models\ProfilePic;
 use App\Models\StaffOfficial;
 use App\Models\Transaction;
 use App\Models\User;
@@ -305,6 +306,21 @@ Route::get("/resident-accounts/view-account/user-code={userCode}", function($use
 });
 
 
+Route::get('/request-document/docType={docType}/user-code={userCode}', function($docType, $userCode){
+    if (Auth::check()){
+        if (Auth::user()->role == "User"){
+            $userData = User::where('userCode', $userCode)->first();
+            return view('Users.User.CreateRequestDocument', ['userData' => $userData, 'docType' => $docType]);
+        }else if (Auth::user()->role == "Admin"){
+            $userData = User::where('userCode', $userCode)->first();
+            return view('Users.Admin.CreateRequestDocument', ['userData' => $userData, 'docType' => $docType]);
+        }
+    }else{
+        return redirect('/');
+    }
+});
+
+
 Route::get('/get-master-lists', function(){
     return view('Auth.SearchMasterLists');
 });
@@ -331,12 +347,31 @@ Route::post('/upload-image', [ProfilePicController::class, 'uploadImage']);
 
 Route::post('/register', [UserController::class, 'register']);
 
-Route::post('/submit-request', [TransactionController::class, 'addRequest']);
-Route::post('/edit-transaction', [TransactionController::class, 'editTransaction']);
-Route::post('/delete-transaction', [TransactionController::class, 'deleteTransaction']);
-Route::post('/process-request', [TransactionController::class, 'processRequest']);
-Route::post('/approve-request', [TransactionController::class, 'approveRequest']);
-Route::post('/reject-request', [TransactionController::class, 'rejectRequest']);
+
+Route::post('/submit-request-document-attestation', [TransactionController::class, 'createAttestation']);
+Route::post('/edit-attestation', [TransactionController::class, 'editAttestation']);
+Route::post('/delete-attestation', [TransactionController::class, 'deleteAttestation']);
+
+Route::post('/submit-request-document-bar-cert', [TransactionController::class, 'createBarCert']);
+Route::post('/edit-bar-cert-reg', [TransactionController::class, 'editBarCertReg']);
+Route::post('/delete-bar-cert-reg', [TransactionController::class, 'deleteBarCertReg']);
+
+Route::post('/submit-request-document-bar-clear', [TransactionController::class, 'createBarClear']);
+Route::post('/edit-barangay-clearance', [TransactionController::class, 'editBarClear']);
+Route::post('/delete-barangay-clearance', [TransactionController::class, 'deleteBarClear']);
+
+Route::post('/submit-request-document-bar-iden', [TransactionController::class, 'createBarIden']);
+Route::post('/delete-barangay-identification', [TransactionController::class, 'deleteBarIden']);
+
+Route::post('/submit-request-document-bar-indigent', [TransactionController::class, 'createBarIndigent']);
+Route::post('/edit-barangay-indigent', [TransactionController::class, 'editBarIndigent']);
+Route::post('/delete-barangay-indigent', [TransactionController::class, 'deleteBarIndigent']);
+
+Route::post('/set-process', [TransactionController::class, 'setProcess']);
+Route::post('/set-reject', [TransactionController::class, 'setRejected']);
+Route::post('/set-approve', [TransactionController::class, 'setApprove']);
+Route::post('/print-pay-transaction', [TransactionController::class, 'setCompleted']);
+
 
 Route::post('/add-staff-official', [StaffOfficialController::class, 'addStaffOfficial']);
 
@@ -378,6 +413,12 @@ Route::get('/get-users/option={option}/filter={filter}', function($option, $filt
 
 Route::get('/get-user/user-id={userId}', function($userId){
     $data = User::find($userId);
+    return response()->json($data);
+});
+
+
+Route::get('/get-users/user-residents', function(){
+    $data = User::where('role', 'User')->orderBy('completeName', 'asc')->get();
     return response()->json($data);
 });
 
@@ -444,7 +485,7 @@ Route::get('/get-profile-details/user-code={userCode}', function($userCode){
 Route::get('/get-transactions/user-code={userCode}', function($userCode){
 
     if (Auth::user()->role == "Admin"){
-        $data = Transaction::with(['user'])->get();
+        $data = Transaction::with(['user'])->orderBy('created_at', 'DESC')->get();
         return response()->json($data);
     }else if (Auth::user()->role == "Punong Barangay"){
         $data = Transaction::with(['user'])->get();
@@ -460,7 +501,7 @@ Route::get('/get-transactions/user-code={userCode}', function($userCode){
 });
 
 Route::get('/get-transactions/transaction-code={transactionCode}', function($transactionCode){
-    $data = Transaction::where('code', $transactionCode)->with(['user', 'cedula'])->get()->first();
+    $data = Transaction::where('code', $transactionCode)->with(['user', 'cedula', 'attestation_details', 'bar_cert_reg_details', 'bar_clear_details', 'bar_iden_details', 'bar_indigent_details'])->get()->first();
     return response()->json($data);
 });
 
@@ -731,4 +772,15 @@ Route::get('/session-test', function() {
         'test_value' => session('test'),
         'driver' => config('session.driver')
     ]);
+});
+
+
+Route::get('/get-user/user-code={userCode}', function($userCode){
+    $data = User::where('userCode', $userCode)->with(['profile_pic'])->first();
+    return response()->json($data);
+});
+
+Route::get('/load-latest-or-no', function(){
+    $data = Payment::latest()->first();
+    return response()->json($data);
 });

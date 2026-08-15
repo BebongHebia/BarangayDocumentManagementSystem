@@ -12,11 +12,10 @@ class Transaction extends Model
         'dateCreated',
         'status',
         'code',
-        'purpose',
-        'purposeType',
         'validity',
         'remarks',
         'dateSched',
+        'issueDate',
     ];
 
     public function user(){
@@ -30,5 +29,24 @@ class Transaction extends Model
     public function cedula(){
         return $this->hasOne(Cedula::class, 'userCode', 'userCode')
                 ->latest('id');
+    }
+
+    public function attestation_details(){
+        return $this->belongsTo(Attestation::class, 'code', 'transactionCode');
+    }
+
+    public function bar_cert_reg_details(){
+        return $this->belongsTo(BarCert::class, 'code', 'transactionCode');
+    }
+    public function bar_clear_details(){
+        return $this->belongsTo(BarangayClearance::class, 'code', 'transactionCode');
+    }
+
+    public function bar_iden_details(){
+        return $this->belongsTo(BarangayIdentification::class, 'code', 'transactionCode');
+    }
+
+    public function bar_indigent_details(){
+        return $this->belongsTo(BarangayIndigent::class, 'code', 'transactionCode');
     }
 }
