@@ -27,7 +27,7 @@
                 <div class="col-sm-12">
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h5 class="card-title">Lists of Resident</h5>
+                            <h5 class="card-title">Lists of Survey Resident (No Account)</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
