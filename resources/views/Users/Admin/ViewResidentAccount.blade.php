@@ -40,7 +40,7 @@
                                                 @if(!$profilePic)
                                                 <img src="{{ asset('assets/images/profile_icon.png') }}" id="profileIcon" class="profile-image" alt="Profile Picture">
                                                 @else
-                                                <img src="{{ asset('storage/' . $profilePic->path) }}" id="profileIcon" class="profile-image" alt="Profile Picture">
+                                                <img src="{{ asset('storage/app/public/' . $profilePic->path) }}" id="profileIcon" class="profile-image" alt="Profile Picture">
                                                 @endif
                                             </div>
                                         </div>

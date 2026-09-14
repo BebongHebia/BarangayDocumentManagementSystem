@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MasterList extends Model
 {
     protected $fillable = [
+        'listCode',
         'firstName',
         'middleName',
         'lastName',

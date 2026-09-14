@@ -27,13 +27,13 @@
                 <div class="col-sm-12">
                     <div class="card card-dark">
                         <div class="card-header">
-                            <h5 class="card-title">Lists of Residents</h5>
+                            <h5 class="card-title">Lists of Resident</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#CreateMasterListsModal">
-                                        <i class="fas fa-plus"></i> Add new resident
+                                        <i class="fas fa-plus"></i> Add new masterlists
                                     </button>
                                 </div>
                             </div>

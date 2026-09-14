@@ -10,8 +10,6 @@
             <div class="modal-body">
                 <form id="addMasterListsForm">
                     @csrf
-
-
                     <div class="row">
                         <label>List Code</label>
                         <div class="col-sm-12 d-flex">

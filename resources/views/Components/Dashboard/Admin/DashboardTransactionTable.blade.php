@@ -4,7 +4,6 @@
         <th>Code</th>
         <th>Complete Name</th>
         <th>Type</th>
-        <th>Purpose</th>
         <th>Date Created</th>
         <th>OR No.#</th>
         <th>Payment</th>

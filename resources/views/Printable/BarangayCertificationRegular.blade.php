@@ -176,7 +176,7 @@
                         <b>TO WHOM IT MAY CONCERN:</b><br><br>
                         This is to certify that <span><b>{{  $transaction->user->completeName }}</b></span>, of legal age, Filipino, and a resident of <span><b>{{  $transaction->bar_cert_reg_details->sector }}</b></span>, BARANGAY 8, MALAYBALAY CITY, is a bona fide resident of this barangay.
                         <br><br>
-                        This is to certify further that she is a resident of the barangay for <span><b>{{  $transaction->bar_cert_reg_details->residentYears }}</b></span> years. 
+                        This is to certify further that she is a resident of the barangay for <span><b>{{  $transaction->bar_cert_reg_details->residentYears }}</b></span> years.
                         <br><br>This certification is issued upon the request of the above-named person for <span><b>{{  $transaction->bar_cert_reg_details->purpose }}</b></span> purposes.
                         <br><br>Issued this <span><b>{{ $transaction->payment->created_at->format('d') }}</b></span> day of <span><b>{{ $transaction->payment->created_at->format('M') }}</b></span> at the Office of the Punong Barangay, Bontao St, Barangay 8, Malaybalay City.
 

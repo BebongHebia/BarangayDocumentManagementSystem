@@ -39,7 +39,6 @@ function displayTransactions(option, filter) {
                         <td>${transactions.code}</td>
                         <td>${transactions.user.completeName}</td>
                         <td>${transactions.type}</td>
-                        <td>${transactions.purpose}</td>
                         <td>${transactions.dateCreated}</td>
                         <td>${dataOrNo}</td>
                         <td>${dataPayment}</td>
@@ -70,6 +69,8 @@ function getStatusBadge(status) {
         badgeClass = "badge bg-primary";
     } else if (statusLower === "rejected") {
         badgeClass = "badge bg-danger";
+    }else if (statusLower === "completed") {
+        badgeClass = "badge bg-success";
     }
 
     return `<span class="${badgeClass}">${displayText}</span>`;
@@ -84,6 +85,7 @@ function getStatusBadge(status) {
         approved: "bg-success",
         processing: "bg-primary",
         rejected: "bg-danger",
+        completed: "bg-success",
     };
 
     const colorClass = statusMap[statusLower] || "bg-secondary";
