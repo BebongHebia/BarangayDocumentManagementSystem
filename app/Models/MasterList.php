@@ -18,6 +18,7 @@ class MasterList extends Model
         'bloodType',
         'civilStatus',
         'religion',
+        'purok',
         'address',
         'citizenship',
         'profession',

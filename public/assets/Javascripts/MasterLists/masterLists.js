@@ -52,12 +52,27 @@ function openEditMasterListModal(masterListId) {
         type: "get",
         url: baseUrl + "/get-masterlist/list-id=" + masterListId,
         success: function (data) {
-            $("#editListId").val(data.id);
-            $("#editListCode").val(data.listCode);
+            console.log(data.id);
+            $("#editMasterListId").val(data.id);
+            $("#editListId").val(data.listCode);
+            $("#editResType").val(data.resType).trigger('change');
             $("#editFirstName").val(data.firstName);
             $("#editMiddleName").val(data.middleName);
             $("#editLastName").val(data.lastName);
-            $("#editStatus").val(data.status).trigger("change");
+            $("#editSuffix").val(data.suffix);
+            $("#editSex").val(data.sex);
+            $("#editBirthdate").val(data.birthdate);
+            $("#editPlaceOfBirth").val(data.placeOfBirth);
+            $("#editBloodType").val(data.bloodType);
+            $("#editCivilStatus").val(data.civilStatus);
+            $("#editReligion").val(data.religion);
+            $("#editCitizenship").val(data.citizenship);
+            $("#editPurok").val(data.purok);
+            $("#editAddress").val(data.address);
+            $("#editEmail").val(data.email);
+            $("#editContact").val(data.contact);
+            $("#editEducationalAtt").val(data.educationalAtt);
+            $("#editProfession").val(data.profession);
         },
     });
     $("#EditMasterListsModal").modal("show");

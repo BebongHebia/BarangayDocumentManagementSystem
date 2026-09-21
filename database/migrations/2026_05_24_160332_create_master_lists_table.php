@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('bloodType');
             $table->string('civilStatus');
             $table->string('religion');
+            $table->string('purok');
             $table->string('address');
             $table->string('citizenship');
             $table->string('profession');
