@@ -19,16 +19,28 @@ function displayMasterLists() {
             let counter = 0;
             $.each(data, function (index, masterLists) {
                 counter++;
-                rows += `
-                    <tr>
-                        <td>${counter}</td>
-                        <td>${masterLists.firstName}</td>
-                        <td>${masterLists.middleName}</td>
-                        <td>${masterLists.lastName}</td>
-                        <td>${masterLists.listCode}</td>
-                        <td>${masterLists.status}</td>
 
-                        <td>
+                let actBtn = '';
+                let accExists = masterLists.user ? 'Yes' : 'No';
+                if (masterLists.user == null) {
+                    actBtn = `
+                            <a href="/masterlists/account-creation/masterlists-id=${masterLists.id}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                            <button class="btn btn-warning btn-sm" onclick="openEditMasterListModal(${masterLists.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+
+                            <button class="btn btn-danger btn-sm" onclick="openDeleteMasterListModal(${masterLists.id})">
+                                <i class="fas fa-trash"></i>
+                            </button> 
+                            
+                            
+                        `;
+                }else{
+                    actBtn = 
+                    
+                            `
                             <button class="btn btn-warning btn-sm" onclick="openEditMasterListModal(${masterLists.id})">
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -36,6 +48,25 @@ function displayMasterLists() {
                             <button class="btn btn-danger btn-sm" onclick="openDeleteMasterListModal(${masterLists.id})">
                                 <i class="fas fa-trash"></i>
                             </button>
+
+                            
+                            
+                            `
+                            ;
+                }
+
+                rows += `
+                    <tr>
+                        <td>${counter}</td>
+                        <td>${masterLists.firstName}</td>
+                        <td>${masterLists.middleName}</td>
+                        <td>${masterLists.lastName}</td>
+                        <td>${masterLists.listCode}</td>
+                        <td>${accExists}</td>
+                        <td>${masterLists.status}</td>
+
+                        <td>
+                            ${actBtn}
                         </td>
                     </tr>
 

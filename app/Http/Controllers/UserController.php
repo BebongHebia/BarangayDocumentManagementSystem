@@ -95,6 +95,33 @@ class UserController extends Controller
 
     }
 
+     public function adminCreateUserAccount(Request $request){
+        $completeName = $request->firstName . " " . substr($request->middleName, 0, 1) . " " . $request->lastName;
+        // Create the user
+        $user = User::create([
+            'listCode' => $request->listCode,
+            'completeName' => $completeName,
+            'purok' => $request->purok,
+            'sex' => $request->sex,
+            'bday' => $request->birthdate,
+            'civilStatus' => $request->civilStatus,
+            'placeOfBirth' =>  $request->placeOfBirth,
+            'citizenship' => $request->citizenship,
+            'currentAddress' => $request->address,
+            'profession' => $request->profession,
+            'phone' => $request->contact,
+            'role' => "User",
+            'status' => "Active",
+            'userCode' => date("Ymdhis"),
+            'profilePic' => "N/A",
+            'username' => $request->username,
+            'password' => bcrypt($request->password), 
+        ]);
+
+        return redirect('/');
+
+    }
+
     public function editUser(Request $request){
         $data = User::find($request->userId);
         $data->completeName = $request->completeName;

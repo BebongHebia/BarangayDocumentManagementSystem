@@ -78,9 +78,6 @@ function displayTransactions() {
                             <i class="fas fa-arrow-right"></i>
                         </button>
 
-                        <button class="btn btn-dark btn-sm">
-                            <i class="fas fa-eye"></i>
-                        </button>
 
                     `;
                 } else if (transactions.status == "Completed") {
@@ -89,9 +86,9 @@ function displayTransactions() {
                     `;
                     actionBtns = `
 
-                        <button class="btn btn-dark btn-sm">
+                        <a href="/transactions/print-transaction/transaction-code=${transactions.code}" class="btn btn-dark btn-sm">
                             <i class="fas fa-eye"></i>
-                        </button>
+                        </a>
 
                     `;
                 } else {

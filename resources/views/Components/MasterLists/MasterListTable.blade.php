@@ -5,6 +5,7 @@
         <th>Middle Name</th>
         <th>Last Name</th>
         <th>List Code</th>
+        <th>Account Exists</th>
         <th>Status</th>
         <th>Action</th>
     </thead>

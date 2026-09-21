@@ -49,7 +49,7 @@ function displayMasterListData() {
             $("#bloodType").val(data.bloodType).trigger("change");
             $("#civilStatus").val(data.civilStatus).trigger("change");
             $("#address").val(data.address);
-            $("#purok").val(data.purok);
+            $("#purok").val(data.purok).trigger("change");
             $("#citizenship").val(data.citizenship);
             $("#religion").val(data.religion);
             $("#profession").val(data.profession);

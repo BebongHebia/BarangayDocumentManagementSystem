@@ -1,8 +1,16 @@
 @extends('Users.Admin.Sidebar')
 @section('sidebar')
-    @include('Components.MasterLists.CreateMasterListsModal')
-    @include('Components.MasterLists.EditMasterListModal')
-    @include('Components.MasterLists.DeleteMasterListsModal')
+    @include('Components.Cedula.Admin.AddCedulaModal')
+    @include('Components.Cedula.Admin.EditCedulaModal')
+    @include('Components.Cedula.Admin.DeleteCedulaModal')
+    <style>
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+    </style>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -10,7 +18,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-12">
-                        <h1 class="m-0">Master List</h1>
+                        <h1 class="m-0">Cedula</h1>
                     </div>
                 </div>
                 <!-- /.row -->
@@ -23,31 +31,34 @@
         <section class="content">
             <div class="container-fluid">
 
-                <div class="row">
+                <div class="row mt-2">
                     <div class="col-sm-12">
                         <div class="card card-dark">
                             <div class="card-header">
-                                <h5 class="card-title">Lists of Survey Resident (No Account)</h5>
+                                <div class="card-title">Cedula Details</div>
                             </div>
                             <div class="card-body">
+
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <button type="button" class="btn btn-dark" data-toggle="modal"
-                                            data-target="#CreateMasterListsModal">
-                                            <i class="fas fa-plus"></i> Add new masterlists
+                                        <button class="btn btn-dark" data-toggle="modal" data-target="#AddCedulaModal">
+                                            <i class="fas fa-plus"></i> Add Cedula
                                         </button>
                                     </div>
                                 </div>
+
                                 <div class="row mt-2">
                                     <div class="col-sm-12">
-                                        @include('Components.MasterLists.MasterListTable')
+                                        @include('Components.Cedula.Admin.CedulaTable')
                                     </div>
                                 </div>
+
+
+
                             </div>
                         </div>
                     </div>
                 </div>
-
 
 
             </div>
@@ -56,5 +67,7 @@
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    <script src="{{ asset('assets/Javascripts/MasterLists/masterLists.js') }}"></script>
+
+    </script>
+    <script src="{{ asset('assets/Javascripts/Cedula/Admin/cedula.js') }}"></script>
 @endsection

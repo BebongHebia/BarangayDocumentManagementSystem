@@ -19,11 +19,13 @@ class CedulaController extends Controller
 
     public function editCedula(Request $request){
         $data = Cedula::find($request->cedId);
+        $data->userCode = $request->userCode;
         $data->cedulaNo = $request->cedulaNo;
         $data->dateAcquired = $request->dateAcquired;
         $data->validity = $request->validity;
         $data->save();
     }
+
 
     public function deleteCedula(Request $request){
         $data = Cedula::find($request->cedId);

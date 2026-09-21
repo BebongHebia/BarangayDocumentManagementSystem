@@ -59,9 +59,8 @@ function deleteCedula(event) {
 
 displayCedula();
 function displayCedula() {
-    var userCode = $("#userCode").val();
     $.ajax({
-        url: "/get-cedula/userCode=" + userCode,
+        url: "/get-cedula",
         method: "GET",
         success: function (data) {
             let rows = ``;
@@ -77,7 +76,9 @@ function displayCedula() {
 
                     <tr>
                         <td>${counter}</td>
+                        
                         <td>${cedula.cedulaNo}</td>
+                        <td>${cedula.user.completeName}</td>
                         <td>${dataDateAcquired}</td>
                         <td>${dataValidity}</td>
                         <td>
@@ -115,8 +116,8 @@ function openEditCedulaModal(cedId) {
         method: "GET",
         success: function (data) {
             $("#editCedId").val(data.id);
+            $("#editUserCode").val(data.userCode).trigger('change');
             $("#editCedNo").val(data.cedulaNo);
-            $("#editUserCode").val(data.userCode);
             $("#editDateAcquired").val(data.dateAcquired);
             $("#editValidity").val(data.validity);
         },

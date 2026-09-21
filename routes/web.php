@@ -228,11 +228,11 @@ Route::get('/reports', function(){
 Route::get('/cedula', function(){
     if (Auth::check()){
         if (Auth::user()->role == "Admin"){
-            return view('Users.Admin.Reports');
+            return view('Users.Admin.Cedula');
         }else if (Auth::user()->role == "Punong Barangay"){
             return view('Users.Kapitan.Reports');
         }else if (Auth::user()->role == "Incharge"){
-            return view('Users.Incharge.Cedula');
+            return view('Users.Incharge.Reports');
         }else if (Auth::user()->role == "User"){
             return view('Users.User.Cedula');
         }
@@ -325,7 +325,10 @@ Route::get('/get-master-lists', function(){
     return view('Auth.SearchMasterLists');
 });
 
-
+Route::get('/masterlists/account-creation/masterlists-id={masterListsID}', function($masterListsID){
+    $data = MasterList::find($masterListsID);
+    return view('Users.Admin.AccountCreation', ['masterListsData' => $data]);
+});
 
 
 //Authentications Controls
@@ -346,6 +349,7 @@ Route::post('/delete-masterlist', [MasterListController::class, 'deleteMasterLis
 Route::post('/upload-image', [ProfilePicController::class, 'uploadImage']);
 
 Route::post('/register', [UserController::class, 'register']);
+Route::post('/admin-create-user-account', [UserController::class, 'adminCreateUserAccount']);
 
 
 Route::post('/submit-request-document-attestation', [TransactionController::class, 'createAttestation']);
@@ -393,6 +397,7 @@ Route::post('/delete-announcement', [AnnouncementController::class, 'deleteAnnou
 
 Route::post('/add-cedula', [CedulaController::class, 'addCedula']);
 Route::post('/edit-cedula', [CedulaController::class, 'editCedula']);
+Route::post('/admin-edit-cedula', [CedulaController::class, 'editCedula']);
 Route::post('/delete-cedula', [CedulaController::class, 'deleteCedula']);
 
 Route::post('/add-complain-incident-report', [CompaintIncidentReportController::class, 'addComplainIncident']);
@@ -431,6 +436,8 @@ Route::get('/get-masterlist/list-id={listId}', function($listId){
     $data = MasterList::find($listId);
     return response()->json($data);
 });
+
+
 
 Route::post('/search-masterlists', function(Request $request){
      $query = MasterList::query();
@@ -733,6 +740,11 @@ Route::get('/dashboard-get-transactions/option={option}/filter={filter}', functi
 
 Route::get('/get-cedula/userCode={userCode}', function($userCode){
     $data = Cedula::where('userCode', $userCode)->get();
+    return response()->json($data);
+});
+
+Route::get('/get-cedula', function(){
+    $data = Cedula::with('user')->get();
     return response()->json($data);
 });
 

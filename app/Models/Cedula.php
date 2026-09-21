@@ -12,4 +12,8 @@ class Cedula extends Model
         'dateAcquired',
         'validity',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class, 'userCode', 'userCode');
+    }
 }

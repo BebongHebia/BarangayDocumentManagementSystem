@@ -11,7 +11,16 @@
                 <form id="editCedulaForm">
                     @csrf
                     <input type="hidden" name="cedId" id="editCedId">
-                    <input type="hidden" name="userCode" id="editUserCode">
+                    <label>Resident</label>
+                    @php
+                        $residents = \App\Models\User::where('role', 'User')->get();
+
+                    @endphp
+                    <select class="form-select select2" name="userCode" id="editUserCode">
+                        @foreach ($residents as $residentItems)
+                            <option value="{{ $residentItems->userCode }}">{{ $residentItems->completeName }}</option>
+                        @endforeach
+                    </select>
 
                     <label>Cedula No.#</label>
                     <input type="text" class="form-control" name="cedulaNo" id="editCedNo">

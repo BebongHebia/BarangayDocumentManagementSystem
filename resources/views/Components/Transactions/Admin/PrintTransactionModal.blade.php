@@ -15,7 +15,8 @@
                     <input type="hidden" name="transactionCode" id="adminPrintTransaction_transactionCode">
 
                     <div class="row">
-                        <div class="col-sm-12" style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
+                        <div class="col-sm-12"
+                            style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
                             <h5 class="text-start">Transaction Details</h5>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -24,7 +25,8 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label>Date Schedule</label>
-                                    <input type="date" name="dateSched" id="adminPrintTransaction_dateSched" class="form-control" readonly>
+                                    <input type="date" name="dateSched" id="adminPrintTransaction_dateSched"
+                                        class="form-control" readonly>
                                 </div>
                             </div>
 
@@ -33,7 +35,8 @@
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-sm-12" style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
+                        <div class="col-sm-12"
+                            style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
                             <h5 class="text-start">Cedula Details</h5>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -59,7 +62,8 @@
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-sm-12" style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
+                        <div class="col-sm-12"
+                            style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
                             <h5 class="text-start">Payment Details</h5>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -85,7 +89,8 @@
                     </div>
 
                     <div class="row mt-2">
-                        <div class="col-sm-12" style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
+                        <div class="col-sm-12"
+                            style="border:1px solid rgb(160, 160, 160); box-shadow: 2px 2px 2px rgb(172, 172, 172); border-radius: 3px; padding:10px;">
                             <h5 class="text-start">Document Details</h5>
                             <div class="row">
                                 <div class="col-sm-3">
