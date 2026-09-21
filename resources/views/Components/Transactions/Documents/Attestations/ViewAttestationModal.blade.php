@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-sm-6">
                         <center>
-                            <img src="{{ asset('assets/images/DocImage/ATTESTATION-2026.jpg') }}" class="img-fluid">
+                            <img src="{{ asset('assets/images/DocImage/ATTESTATION-2026.png') }}" class="img-fluid">
                         </center>
 
                     </div>

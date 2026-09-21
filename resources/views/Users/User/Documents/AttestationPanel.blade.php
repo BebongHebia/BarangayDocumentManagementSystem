@@ -93,7 +93,7 @@
     </div>
     <div class="col-sm-6">
         <center>
-            <img src="{{ asset('assets/images/DocImage/ATTESTATION-2026.jpg') }}" style="max-width: 60%; border:1px solid black" class="img-fluid">
+            <img src="{{ asset('assets/images/DocImage/ATTESTATION-2026.png') }}" style="max-width: 60%; border:1px solid black" class="img-fluid">
         </center>
 
     </div>

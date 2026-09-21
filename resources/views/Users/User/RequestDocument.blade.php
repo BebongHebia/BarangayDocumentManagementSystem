@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="panel-body">
                                             <center>
-                                                <img src="{{ asset('assets/images/DocImage/ATTESTATION-2026.jpg') }}" style="max-width: 40%" class="img-fluid">
+                                                <img src="{{ asset('assets/images/DocImage/ATTESTATION-2026.png') }}" style="max-width: 40%" class="img-fluid">
                                             </center>
 
                                             <a href="{{ url('/request-document/docType=ATTESTATION/user-code=' . Auth::user()->userCode) }}" class="btn-submit-request">

@@ -542,7 +542,7 @@ function loadUsers(docType) {
     if (docType == "ATTESTATION") {
         $("#adminCreateTransactionResImg").attr(
             "src",
-            "assets/images/DocImage/ATTESTATION-2026.jpg",
+            "assets/images/DocImage/ATTESTATION-2026.png",
         );
     } else if (docType == "BARANGAY-CERTIFICATION-REGULAR") {
         $("#adminCreateTransactionResImg").attr(
