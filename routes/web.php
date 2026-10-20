@@ -376,6 +376,7 @@ Route::post('/set-reject', [TransactionController::class, 'setRejected']);
 Route::post('/set-approve', [TransactionController::class, 'setApprove']);
 Route::post('/print-pay-transaction', [TransactionController::class, 'setCompleted']);
 
+Route::post('/print-attestation', [TransactionController::class, 'setPrintAttestation']);
 
 Route::post('/add-staff-official', [StaffOfficialController::class, 'addStaffOfficial']);
 

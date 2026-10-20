@@ -429,6 +429,7 @@ class TransactionController extends Controller
             $transaction->update([
                 'remarks' => "Your requested document : " . $transaction->type . " is now Completed.",
                 'status' => 'Completed',
+                'signedBy' => $request->signedBy,
                 'dateSched' => $request->dateSched
             ]);
         }
@@ -466,4 +467,16 @@ class TransactionController extends Controller
         ]);
     }
 
+    public function setPrintAttestation(Request $request){
+        $transaction = Transaction::where('code', $request->transactionCode)->first();
+        $transaction->status = "Completed";
+        $transaction->signedBy = $request->staffOfficial;
+        $transaction->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Request Approved',
+            'redirect_url' => url('/transactions/print-transaction/transaction-code=' . $transaction->code)
+        ]);
+    }
 }

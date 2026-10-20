@@ -14,7 +14,8 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Please Select Document To Process</label>
-                            <select class="form-select select2" name="type" id="adminCreateTransactionDocType" onchange="loadUsers(this.value)">
+                            <select class="form-select select2" name="type" id="adminCreateTransactionDocType"
+                                onchange="loadUsers(this.value)">
                                 <option disabled selected>Select Document</option>
                                 <option value="ATTESTATION">ATTESTATION</option>
                                 <option value="BARANGAY-CERTIFICATION-REGULAR">BARANGAY-CERTIFICATION-REGULAR</option>
@@ -22,11 +23,13 @@
                                 <option value="BARANGAY-CLEARANCE">BARANGAY-CLEARANCE</option>
                                 <option value="BARANGAY-IDENTIFICATION">BARANGAY-IDENTIFICATION</option>
                                 <option value="BARANGAY-INDIGENCY-REGULAR">BARANGAY-INDIGENCY-REGULAR</option>
-                                <option value="BARANGAY-INDIGENCY-WITH-PATIENT-NAME">BARANGAY-INDIGENCY-WITH-PATIENT-NAME</option>
+                                <option value="BARANGAY-INDIGENCY-WITH-PATIENT-NAME">
+                                    BARANGAY-INDIGENCY-WITH-PATIENT-NAME</option>
                             </select>
 
                             <label>Select Resident</label>
-                            <select class="form-select select2" name="userCode" id="adminCreateTransactionUserCode" onchange="loadSelectedUserDetails(this.value)">
+                            <select class="form-select select2" name="userCode" id="adminCreateTransactionUserCode"
+                                onchange="loadSelectedUserDetails(this.value)">
 
                             </select>
 
@@ -34,31 +37,41 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <center>
-                                        <div style="width: 50%; aspect-ratio: 1/1; border-radius: 50%; overflow: hidden;">
-                                            <img src="{{ asset('assets/images/dummyLogo.png') }}" id="adminSelectedUserImage" style="width: 100%; height: 100%; object-fit: cover;">
+                                        <div
+                                            style="width: 50%; aspect-ratio: 1/1; border-radius: 50%; overflow: hidden;">
+                                            <img src="{{ asset('assets/images/dummyLogo.png') }}"
+                                                id="adminSelectedUserImage"
+                                                style="width: 100%; height: 100%; object-fit: cover;">
                                         </div>
                                     </center>
                                 </div>
                                 <div class="col-sm-8">
                                     <label>User Code</label>
-                                    <input type="text" id="adminCreateTransactionSelectedUserUserCode" class="form-control" readonly>
+                                    <input type="text" id="adminCreateTransactionSelectedUserUserCode"
+                                        class="form-control" readonly>
                                     <label>Name</label>
-                                    <input type="text" id="adminCreateTransactionSelectedUserName" class="form-control" readonly style="width:100%">
+                                    <input type="text" id="adminCreateTransactionSelectedUserName" class="form-control"
+                                        readonly style="width:100%">
                                     <label>Sex</label>
-                                    <input type="text" id="adminCreateTransactionSelectedUserSex" class="form-control" readonly style="width:100%">
+                                    <input type="text" id="adminCreateTransactionSelectedUserSex" class="form-control"
+                                        readonly style="width:100%">
                                     <label>Birthday</label>
-                                    <input type="text" id="adminCreateTransactionSelectedUserBday" class="form-control" readonly style="width:100%">
+                                    <input type="text" id="adminCreateTransactionSelectedUserBday" class="form-control"
+                                        readonly style="width:100%">
                                     <label>Civil Status</label>
-                                    <input type="text" id="adminCreateTransactionSelectedCivilStatus" class="form-control" readonly style="width:100%">
+                                    <input type="text" id="adminCreateTransactionSelectedCivilStatus"
+                                        class="form-control" readonly style="width:100%">
                                     <label>Sector</label>
-                                    <input type="text" id="adminCreateTransactionSelectedSector" class="form-control" readonly style="width:100%">
+                                    <input type="text" id="adminCreateTransactionSelectedSector" class="form-control"
+                                        readonly style="width:100%">
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div id="adminCreateTransactionsUserProfile">
                                 <center>
-                                    <img src="{{ asset('assets/images/dummyLogo.png') }}" class="img-fluid" id="adminCreateTransactionResImg" style="width:50%">
+                                    <img src="{{ asset('assets/images/dummyLogo.png') }}" class="img-fluid"
+                                        id="adminCreateTransactionResImg" style="width:50%">
                                 </center>
                             </div>
                         </div>

@@ -68,12 +68,12 @@
                             <label>Date of Birth</label>
                             <input type="date" name="birthdate" class="form-control" placeholder="Enter Birthday">
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <label>Place of Birth</label>
                             <input type="text" name="placeOfBirth" class="form-control"
                                 placeholder="Enter Place of Birth">
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <label for="resType">Blood Type</label>
                             <select class="form-select select2" name="bloodType">
                                 <option value="A+">A+</option>

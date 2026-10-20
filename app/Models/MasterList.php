@@ -22,6 +22,8 @@ class MasterList extends Model
         'address',
         'citizenship',
         'profession',
+        'socialStatus',
+        'isIP',
         'contact',
         'email',
         'educationalAtt',

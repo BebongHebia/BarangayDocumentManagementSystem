@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('remarks');
             $table->string('dateSched');
             $table->string('issueDate');
+            $table->string('signedBy')->nullable();
             $table->timestamps();
         });
     }

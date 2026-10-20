@@ -16,7 +16,12 @@ class Transaction extends Model
         'remarks',
         'dateSched',
         'issueDate',
+        'signedBy',
     ];
+
+    public function staffOff(){
+        return $this->belongsTo(StaffOfficial::class, 'signedBy', 'code');
+    }
 
     public function user(){
         return $this->belongsTo(User::class, 'userCode', 'userCode');

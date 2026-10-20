@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -139,21 +140,48 @@
             padding: 5px 10px;
             cursor: pointer;
         }
-
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div id="mainPage">
                     @php
-                    $userProfile = App\Models\ProfilePic::where('userCode', $transaction->user->userCode)->get()->first();
+                        $userProfile = App\Models\ProfilePic::where('userCode', $transaction->user->userCode)->get()->first();
                     @endphp
-                    <p class="text-justify" style="position: relative; top: 290px; left: 90px; width:80%; text-align: justify;" id="displayName">This is to certify that Mr. /Ms. <span><b>{{ $transaction->user->completeName }}</b></span>, <span><b>{{ $transaction->attestation_details->age }}</b></span> YEARS OLD residing at BARANGAY 8, MALAYBALAY CITY, BUKIDNON, is currently <span><b>{{ $transaction->attestation_details->status }}</b></span> earning <span><b>{{ $transaction->attestation_details->income }}</b></span> Php per month.
-                        <br><br>Following a thorough assessment and validation of the client’s socio-economic profile conducted by the Barangay Captain/Barangay Kagawad, it has been determined that Mr. /Ms <span><b>{{ $transaction->user->completeName }}</b></span>, is an individual receiving income below the regional minimum wage and is facing significant financial challenges because of the effects of inflation, like the rising prices of goods and services. The above-mentioned income remains insufficient to meet the unforeseen expenses for <span><b>Plain</b></span> ASSISTANCE on top of the family’s monthly household expenses amounting to Php <span><b>{{ $transaction->attestation_details->totalMonthlyHousholdExpense }}</b></span>, thus further straining their limited financial resources.
-                        <br><br>This certification is issued upon the request of the above-named person for whatever legal purposes it may serve
-                        Issued on <span><b>{{ $transaction->payment->created_at->format('l, M j, Y') }}</b></span>, 2026 at Malaybalay City, Bukidnon.</p>
+
+
+
+                    <p class="text-justify"
+                        style="position: relative; top: 290px; left: 90px; width:80%; text-align: justify;"
+                        id="displayName">This is to certify that Mr. /Ms.
+                        <span><b>{{ $transaction->user->completeName }}</b></span>,
+                        <span><b>{{ $transaction->attestation_details->age }}</b></span> YEARS OLD residing at BARANGAY
+                        8, MALAYBALAY CITY, BUKIDNON, is currently
+                        <span><b>{{ $transaction->attestation_details->status }}</b></span> earning
+                        <span><b>{{ $transaction->attestation_details->income }}</b></span> Php per month.
+                        <br><br>Following a thorough assessment and validation of the client’s socio-economic profile
+                        conducted by the Barangay Captain/Barangay Kagawad, it has been determined that Mr. /Ms
+                        <span><b>{{ $transaction->user->completeName }}</b></span>, is an individual receiving income
+                        below the regional minimum wage and is facing significant financial challenges because of the
+                        effects of inflation, like the rising prices of goods and services. The above-mentioned income
+                        remains insufficient to meet the unforeseen expenses for <span><b>Plain</b></span> ASSISTANCE on
+                        top of the family’s monthly household expenses amounting to Php
+                        <span><b>{{ $transaction->attestation_details->totalMonthlyHousholdExpense }}</b></span>, thus
+                        further straining their limited financial resources.
+                        <br><br>This certification is issued upon the request of the above-named person for whatever
+                        legal purposes it may serve
+                        Issued on <span><b>{{ $transaction->created_at->format('l, M j, Y') }}</b></span>, 2026
+                        at Malaybalay City, Bukidnon.
+
+                    </p>
+
+                    <p style="position: relative; top:320px; left: 360px;">
+                        <b>{{ $transaction->staffOff->completeName }}</b>
+                    </p>
+
 
                 </div>
             </div>
@@ -187,7 +215,7 @@
         }
 
         // PDF Generation using browser print (NO SECURITY ERRORS!)
-        document.getElementById('pdfBtn').addEventListener('click', function() {
+        document.getElementById('pdfBtn').addEventListener('click', function () {
             // Save original title
             const originalTitle = document.title;
             document.title = `Barangay_Document_${formData.name.replace(/\s/g, '_')}`;
@@ -203,7 +231,7 @@
 
         // Edit functionality
         const toggleBtn = document.getElementById('toggleEditBtn');
-        const editPanel = document.getElementById('editPanel');
+        const editnel = document.getElementById('editPanel');
         const applyBtn = document.getElementById('applyEditBtn');
 
         const editName = document.getElementById('editName');
@@ -216,7 +244,7 @@
 
         let panelVisible = false;
 
-        toggleBtn.addEventListener('click', function() {
+        toggleBtn.addEventListener('click', function () {
             panelVisible = !panelVisible;
             editPanel.style.display = panelVisible ? 'block' : 'none';
 
@@ -232,7 +260,7 @@
             }
         });
 
-        applyBtn.addEventListener('click', function() {
+        applyBtn.addEventListener('click', function () {
             formData.name = editName.value.trim() || formData.name;
             formData.birth = editBirth.value.trim() || formData.birth;
             formData.status = editStatus.value.trim() || formData.status;
@@ -253,4 +281,5 @@
 
     </script>
 </body>
+
 </html>

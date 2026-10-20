@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -139,50 +140,90 @@
             padding: 5px 10px;
             cursor: pointer;
         }
-
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div id="mainPage">
                     @php
-                    $userProfile = App\Models\ProfilePic::where('userCode', $transaction->user->userCode)->get()->first();
+                        $userProfile = App\Models\ProfilePic::where('userCode', $transaction->user->userCode)->get()->first();
                     @endphp
                     @if($userProfile == null)
-                    <img src="{{ asset('assets/images/profile_icon.png') }}" class="img-fluid" style="position: absolute; top: 321px; left: 129px; width:15%; height:10%; border:1px solid black;">
+                        <img src="{{ asset('assets/images/profile_icon.png') }}" class="img-fluid"
+                            style="position: absolute; top: 321px; left: 129px; width:15%; height:10%; border:1px solid black;">
                     @else
-                    <img src="{{ asset('storage/' . $userProfile->path) }}" id="profileIcon" class="img-fluid img-circle" style="width:15%; height:10%; border:1px solid black; position: absolute; top: 321px; left: 129px">
+                        <img src="{{ asset('storage/' . $userProfile->path) }}" id="profileIcon"
+                            class="img-fluid img-circle"
+                            style="width:15%; height:10%; border:1px solid black; position: absolute; top: 321px; left: 129px">
                     @endif
-                    <h4 class="text-start" style="position: relative; top: 270px; left: 400px" id="displayName">{{ $transaction->user->completeName }}</h4>
-                    <h4 class="text-start" style="position: relative; top: 265px; left: 400px" id="displayBirth">{{ $transaction->user->bday }}</h4>
-                    <h4 class="text-start" style="position: relative; top: 255px; left: 400px" id="displayStatus">{{ $transaction->user->civilStatus }}</h4>
+                    <h4 class="text-start" style="position: relative; top: 270px; left: 400px" id="displayName">
+                        {{ $transaction->user->completeName }}
+                    </h4>
+                    <h4 class="text-start" style="position: relative; top: 265px; left: 400px" id="displayBirth">
+                        {{ $transaction->user->bday }}
+                    </h4>
+                    <h4 class="text-start" style="position: relative; top: 255px; left: 400px" id="displayStatus">
+                        {{ $transaction->user->civilStatus }}
+                    </h4>
                     <h4 class="text-start" style="position: relative; top: 250px; left: 400px" id="displayAge">
                         {{ \Carbon\Carbon::parse($transaction->user->bday)->age }}
                     </h4>
-                    <h4 class="text-start" style="position: relative; top: 255px; left: 400px" id="displayGender">{{ $transaction->user->sex }}</h4>
-                    <h5 class="text-start" style="position: relative; top: 240px; left: 400px" id="displayAddress">{{ $transaction->user->purok }}, {{ $transaction->user->currentAddress }}</h5>
-                    <h5 class="text-start" style="position: relative; top: 353px; left: 150px" id="displayCedula">{{ $transaction->payment->cedulaNo }}</h5>
-                    <h5 class="text-start" style="position: relative; top: 343px; left: 150px" id="displayCedula">{{ $transaction->payment->cedIssOn }}</h5>
-                    <h5 class="text-start" style="position: relative; top: 330px; left: 150px" id="displayCedula">{{ $transaction->payment->cedIssAt }}</h5>
-                    <h5 class="text-start" style="position: relative; top: 320px; left: 150px" id="displayCedula">{{ $transaction->payment->cedAmount }}</h5>
-                    <h5 class="text-start" style="position: relative; top: 505px; left: 150px" id="displayCedula">{{ $transaction->code }}</h5>
-                    <h5 class="text-start" style="position: relative; top: 525px; left: 150px" id="displayCedula">{{ $transaction->payment->orNo }}</h5>
-                    <h5 class="text-start" style="position: relative; top: 515px; left: 150px" id="displayCedula">{{ $transaction->payment->orIssOn }}</h5>
-                    <p class="text-start" style="position: relative; top: 507px; left: 150px" id="displayCedula">{{ $transaction->payment->orIssAt }}</p>
-                    <p class="text-start" style="position: relative; top: 490px; left: 150px" id="displayCedula">{{ $transaction->payment->orAmount }}</p>
-                    <p class="text-justify" style="position: relative; left: 320px; bottom:50px; width:55%; text-align: justify;">
+                    <h4 class="text-start" style="position: relative; top: 255px; left: 400px" id="displayGender">
+                        {{ $transaction->user->sex }}
+                    </h4>
+                    <h5 class="text-start" style="position: relative; top: 240px; left: 400px" id="displayAddress">
+                        {{ $transaction->user->purok }}, {{ $transaction->user->currentAddress }}
+                    </h5>
+                    <h5 class="text-start" style="position: relative; top: 353px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->cedulaNo }}
+                    </h5>
+                    <h5 class="text-start" style="position: relative; top: 343px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->cedIssOn }}
+                    </h5>
+                    <h5 class="text-start" style="position: relative; top: 330px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->cedIssAt }}
+                    </h5>
+                    <h5 class="text-start" style="position: relative; top: 320px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->cedAmount }}
+                    </h5>
+                    <h5 class="text-start" style="position: relative; top: 505px; left: 150px" id="displayCedula">
+                        {{ $transaction->code }}
+                    </h5>
+                    <h5 class="text-start" style="position: relative; top: 525px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->orNo }}
+                    </h5>
+                    <h5 class="text-start" style="position: relative; top: 515px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->orIssOn }}
+                    </h5>
+                    <p class="text-start" style="position: relative; top: 507px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->orIssAt }}
+                    </p>
+                    <p class="text-start" style="position: relative; top: 490px; left: 150px" id="displayCedula">
+                        {{ $transaction->payment->orAmount }}
+                    </p>
+                    <p class="text-justify"
+                        style="position: relative; left: 320px; bottom:50px; width:55%; text-align: justify;">
                         <b>TO WHOM IT MAY CONCERN:</b><br>
-THIS IS TO CERTIFY that <b>{{ $transaction->user->completeName }}</b> is a bona fide resident at <b>{{ $transaction->bar_indigent_details->sector }}</b> Barangay 08, Malaybalay City.
-<br><br>
-That the subject is <b>categorized as an indigent</b> member of the community and she/he is the <b>{{ $transaction->bar_indigent_details->relation }}</b> of <b>{{ $transaction->bar_indigent_details->authorized }}</b> (patient) having a monthly income that is insufficient to meet the basic needs of their family.
-<br><br>This certification is issued upon the request of <b>{{ $transaction->user->completeName }}</b>
-<br><br>THIS DOCUMENT SHALL SERVE AS A SUPPORTING REQUIREMENT FOR <b>{{ $transaction->bar_indigent_details->purpose }}</b> purposes.</b>
-<br><br>Issued this <span><b>{{ $transaction->payment->created_at->format('d') }}</b></span> day of <span><b>{{ $transaction->payment->created_at->format('M') }}</b></span> at the Office of the Punong Barangay, Bontao St, Barangay 8, Malaybalay City.
+                        THIS IS TO CERTIFY that <b>{{ $transaction->user->completeName }}</b> is a bona fide resident at
+                        <b>{{ $transaction->bar_indigent_details->sector }}</b> Barangay 08, Malaybalay City.
+                        <br><br>
+                        That the subject is <b>categorized as an indigent</b> member of the community and she/he is the
+                        <b>{{ $transaction->bar_indigent_details->relation }}</b> of
+                        <b>{{ $transaction->bar_indigent_details->authorized }}</b> (patient) having a monthly income
+                        that is insufficient to meet the basic needs of their family.
+                        <br><br>This certification is issued upon the request of
+                        <b>{{ $transaction->user->completeName }}</b>
+                        <br><br>THIS DOCUMENT SHALL SERVE AS A SUPPORTING REQUIREMENT FOR
+                        <b>{{ $transaction->bar_indigent_details->purpose }}</b> purposes.</b>
+                        <br><br>Issued this <span><b>{{ $transaction->payment->created_at->format('d') }}</b></span> day
+                        of <span><b>{{ $transaction->payment->created_at->format('M') }}</b></span> at the Office of the
+                        Punong Barangay, Bontao St, Barangay 8, Malaybalay City.
 
-<br><br>
-By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
+                        <br><br>
+                        By the authority of Punong Barangay: <b>{{ $transaction->staffOff->completeName ?? 'N/A'}}</b>
                     </p>
                 </div>
             </div>
@@ -199,10 +240,13 @@ By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
         <div class="edit-panel" id="editPanel">
             <input type="text" id="editName" placeholder="Full Name" value="{{ $transaction->user->completeName }}" />
             <input type="text" id="editBirth" placeholder="Birth Date" value="{{ $transaction->user->bday }}" />
-            <input type="text" id="editStatus" placeholder="Civil Status" value="{{ $transaction->user->civilStatus }}" />
-            <input type="text" id="editAge" placeholder="Age" value="{{ \Carbon\Carbon::parse($transaction->user->bday)->age }}" />
+            <input type="text" id="editStatus" placeholder="Civil Status"
+                value="{{ $transaction->user->civilStatus }}" />
+            <input type="text" id="editAge" placeholder="Age"
+                value="{{ \Carbon\Carbon::parse($transaction->user->bday)->age }}" />
             <input type="text" id="editGender" placeholder="Gender" value="{{ $transaction->user->sex }}" />
-            <input type="text" id="editAddress" placeholder="Address" value="{{ $transaction->user->purok }}, {{ $transaction->user->currentAddress }}" />
+            <input type="text" id="editAddress" placeholder="Address"
+                value="{{ $transaction->user->purok }}, {{ $transaction->user->currentAddress }}" />
             <input type="text" id="editCedulaNo" placeholder="CedulaNo" value="{{ $transaction->payment->cedulaNo }}" />
             <button id="applyEditBtn">Apply Changes</button>
         </div>
@@ -218,7 +262,8 @@ By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
             , gender: 'Male'
             , address: 'Purok 17A, Hagkol, Valencia City'
             , cedulaNo: ''
-        , };
+            ,
+        };
 
         // Display elements
         const displayName = document.getElementById('displayName');
@@ -241,7 +286,7 @@ By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
         }
 
         // PDF Generation using browser print (NO SECURITY ERRORS!)
-        document.getElementById('pdfBtn').addEventListener('click', function() {
+        document.getElementById('pdfBtn').addEventListener('click', function () {
             // Save original title
             const originalTitle = document.title;
             document.title = `Barangay_Indigency_${formData.name.replace(/\s/g, '_')}`;
@@ -270,7 +315,7 @@ By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
 
         let panelVisible = false;
 
-        toggleBtn.addEventListener('click', function() {
+        toggleBtn.addEventListener('click', function () {
             panelVisible = !panelVisible;
             editPanel.style.display = panelVisible ? 'block' : 'none';
 
@@ -286,7 +331,7 @@ By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
             }
         });
 
-        applyBtn.addEventListener('click', function() {
+        applyBtn.addEventListener('click', function () {
             formData.name = editName.value.trim() || formData.name;
             formData.birth = editBirth.value.trim() || formData.birth;
             formData.status = editStatus.value.trim() || formData.status;
@@ -307,4 +352,5 @@ By the authority of Punong Barangay: <b>{{ Auth::user()->completeName }}</b>
 
     </script>
 </body>
+
 </html>

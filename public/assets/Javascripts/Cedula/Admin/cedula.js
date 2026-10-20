@@ -1,22 +1,23 @@
-function addCedula(event) {
-    event.preventDefault();
 
-    $.ajax({
-        url: "/add-cedula",
-        method: "POST",
-        data: $("#addCedulaForm").serialize(),
-        success: function (data) {
-            $("#addCedulaForm")[0].reset();
-            $("#AddCedulaModal").modal("hide");
-            displayCedula();
-            swal.fire({
+function addCedula(event){
+       event.preventDefault();
+
+       $.ajax({
+            url: '/add-cedula',
+            method: 'POST',
+            data: $("#addCedulaForm").serialize(),
+            success: function(data){
+                $("#addCedulaForm")[0].reset();
+                $("#AddCedulaModal").modal('hide');
+                swal.fire({
                 title: "Success",
                 text: "Cedula Added successfully",
                 icon: "success",
             });
-        },
-    });
+            }
+       });
 }
+
 
 function editCedula(event) {
     event.preventDefault();
@@ -78,7 +79,7 @@ function displayCedula() {
                         <td>${counter}</td>
                         
                         <td>${cedula.cedulaNo}</td>
-                        <td>${cedula.user.completeName}</td>
+                        <td>${cedula.completeName}</td>
                         <td>${dataDateAcquired}</td>
                         <td>${dataValidity}</td>
                         <td>
@@ -115,11 +116,28 @@ function openEditCedulaModal(cedId) {
         url: "/get-cedula/ced-id=" + cedId,
         method: "GET",
         success: function (data) {
-            $("#editCedId").val(data.id);
-            $("#editUserCode").val(data.userCode).trigger('change');
-            $("#editCedNo").val(data.cedulaNo);
-            $("#editDateAcquired").val(data.dateAcquired);
-            $("#editValidity").val(data.validity);
+
+            console.log(data.userCode);
+            $("#editCedulaResType").val(data.resType).trigger('change');
+            
+           if (data.resType == "Resident") {
+                $("#editCed_UserCode").val(data.userCode).trigger('change');
+                $("#edit_userCodeSelect").css('display', 'block');
+            } else {
+                $("#edit_userCodeSelect").css('display', 'none');
+            }
+            $("#editCed_CompleteName").val(data.completeName);
+            $("#editCed_Address").val(data.address);
+            $("#editCed_PlaceOfBirth").val(data.placeOfBirth);
+            $("#editCed_DateOfBirth").val(data.dateOfBirth);
+            $("#editCed_Height").val(data.height);
+            $("#editCed_Weight").val(data.weight);
+            $("#editCed_CivilStatus").val(data.civilStatus).trigger('change');
+
+            $("#editCed_CedId").val(data.id);
+            $("#editCed_CedulaNo").val(data.cedulaNo);
+            $("#editCed_dateAcquired").val(data.dateAcquired);
+            $("#editCed_Validity").val(data.validity);
         },
     });
     $("#EditCedulaModal").modal("show");
@@ -149,3 +167,39 @@ function formatDateFromDatabase(dateStr) {
         return dateStr;
     }
 }
+
+
+
+function loadUserDetails(userCode) {
+    $.ajax({
+        url: '/get-user/user-code=' + userCode,
+        method: 'GET',
+        success: function (data) {
+            $("#addCed_CompleteName").val(data.completeName);
+            $("#addCed_Address").val(data.currentAddress);
+            $("#addCed_DateOfBirth").val(data.bday);
+            $("#addCed_PlaceOfBirth").val(data.placeOfBirth);
+            $("#addCed_CivilStatus").val(data.civilStatus).trigger('change');
+        }
+    });
+}
+
+function changeResTypeToggle(resType){
+    const isResident = resType === "Resident";
+    $("#addCed_UserCode").prop('readonly', !isResident);
+    $("#addCed_CompleteName").prop('readonly', isResident);
+
+    $("#addCed_Address").prop('readonly', isResident);
+    $("#addCed_PlaceOfBirth").prop('readonly', isResident);
+    $("#addCed_DateOfBirth").prop('readonly', isResident);
+    $("#addCed_CivilStatus").prop('readonly', isResident);
+
+
+    $("#addCed_CompleteName").val("");
+    $("#addCed_Address").val("");
+    $("#addCed_DateOfBirth").val("");
+    $("#addCed_PlaceOfBirth").val("");
+
+    
+}
+

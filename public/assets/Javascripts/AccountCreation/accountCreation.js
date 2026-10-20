@@ -25,6 +25,15 @@ function adminCreateUserAccount(){
                     window.location.href = baseUrl + "/masterlists";
                 }
             });
-        }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Error",
+                text: "Error Creating User Account please try again",
+                icon: "error",
+            });
+            console.error("Error:", error);
+            console.log("Response:", xhr.responseText);
+        },
     });
 }

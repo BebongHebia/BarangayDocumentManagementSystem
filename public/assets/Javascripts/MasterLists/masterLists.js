@@ -155,6 +155,15 @@ function editMasterLists(event) {
                 icon: "success",
             });
         },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Error",
+                text: "Error Editing Masterlists please try again",
+                icon: "error",
+            });
+            console.error("Error:", error);
+            console.log("Response:", xhr.responseText);
+        },
     });
 }
 
@@ -174,5 +183,25 @@ function addMasterLists(event) {
                 icon: "success",
             });
         },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Error",
+                text: "Error Adding Masterlists please try again",
+                icon: "error",
+            });
+            console.error("Error:", error);
+            console.log("Response:", xhr.responseText);
+        },
     });
 }
+
+$(document).ready(function () {
+    // Auto-uppercase any text input, email, or textarea as the user types
+    $(document).on('input', 'input[type="text"], input[type="email"], textarea', function () {
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.toUpperCase();
+        // Restore cursor position so typing feels natural
+        this.setSelectionRange(start, end);
+    });
+});

@@ -3,6 +3,7 @@
     @include('Components.ViewTransaction.SetProcessingModal')
     @include('Components.ViewTransaction.SetRejectModal')
     @include('Components.ViewTransaction.SetApproveModal')
+    @include('Components.ViewTransaction.Attestation.ApproveAttestationModal')
     @include('Components.Transactions.Admin.PrintTransactionModal')
     <input type="hidden" id="transactionCode" value="{{ $transaction->code }}">
     <!-- Content Wrapper. Contains page content -->
@@ -50,10 +51,19 @@
                                             <i class="fas fa-window-close"></i> Set Rejected
                                         </button>
 
-                                        <button class="btn btn-warning m-2"
-                                            onclick="openPrintModal({{ $transaction->code }})">
-                                            <i class="fas fa-window-close"></i> Walk-in Approve
-                                        </button>
+                                        @if ($transaction->type == "Attestation")
+                                            <button class="btn btn-warning m-2"
+                                                onclick="openApproveAttestationModal({{ $transaction->code }})">
+                                                <i class="fas fa-window-close"></i> Approve and Print
+                                            </button>
+                                        @else
+                                            <button class="btn btn-warning m-2"
+                                                onclick="openPrintModal({{ $transaction->code }})">
+                                                <i class="fas fa-window-close"></i> Walk-in Approve
+                                            </button>
+                                        @endif
+
+
 
                                     </div>
                                 </div>

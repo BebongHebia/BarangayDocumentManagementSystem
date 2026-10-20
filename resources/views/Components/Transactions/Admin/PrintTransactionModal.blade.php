@@ -98,6 +98,19 @@
                                     <input type="text" name="docAmount" id="docAmount" class="form-control">
                                 </div>
 
+                                <div class="col-sm-5">
+                                    <label>Select Approving Kagawad</label>
+                                    <select class="form-select select2" name="signedBy">
+                                        @php
+                                            $staffOffs = App\Models\StaffOfficial::where('status', 'active')->get();
+                                        @endphp
+                                        @foreach ($staffOffs as $staffOff)
+                                            <option value="{{ $staffOff->code }}">{{ $staffOff->completeName }} -
+                                                {{ $staffOff->position }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
 
 

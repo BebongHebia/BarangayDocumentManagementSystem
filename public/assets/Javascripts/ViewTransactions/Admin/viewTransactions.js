@@ -193,3 +193,36 @@ function loadOrNo() {
         },
     });
 }
+
+
+function openApproveAttestationModal(transactionCode){
+    $.ajax({
+        type: "get",
+        url: baseUrl + "/get-transactions/transaction-code=" + transactionCode,
+        success: function (data) {
+            $("#transactionCode").val(data.code);
+            $("#ApproveAttestationModal").modal("show");
+        },
+    });
+}
+
+function setPrintAttestation(){
+    $.ajax({
+        type: "post",
+        url: baseUrl + "/print-attestation",
+        data: $("#approveAttestationForm").serialize(),
+        success: function (data) {
+            $("#approveAttestationForm")[0].reset();
+            $("#ApproveAttestationModal").modal("hide");
+            swal.fire({
+                title: "Success",
+                text: "Request Approved",
+                icon: "success",
+            }).then((result) => {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            });
+        },
+    });
+}
